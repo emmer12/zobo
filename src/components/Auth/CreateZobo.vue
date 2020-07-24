@@ -1,0 +1,196 @@
+<template>
+  <div class="">
+      <div class="d-flex justify-center align-center" style="">
+        <div class="create-zobo">
+            <v-form ref="form">
+            <div style="position:relative">
+              <input
+              name="name"
+              id="id"
+              placeholder="Zobo"
+              v-model="newZobo.title"
+              class="elevation-1 custom-input"
+            />
+            <span class="placeh">Buy me</span>
+            </div>
+            <v-textarea
+              row="2"
+              label="Description"
+              name="name"
+              v-model="newZobo.description"
+              textarea
+              counter="100"
+              rows="2"
+              solo
+              :rules="[rules.required,rules.length]"
+              maxlength="100"
+            ></v-textarea>
+            <v-text-field
+              name="name"
+              label="Minimum"
+              id="id"
+              type="number"
+              v-model="newZobo.min"
+              prepend-inner-icon="mdi-currency-usd"
+              solo
+            ></v-text-field>
+
+              <v-btn v-if="!src.length" color="" class="my-5" @click="openUpload">Upload File</v-btn>
+
+              <img v-else :src="src" width="100%" alt=""> 
+
+            <!-- <v-select
+              solo
+              :items="zoboCat"
+              v-model="newZobo.type"
+              label="Zobos"
+              :loading=loadingC
+            ></v-select> -->
+
+
+            <br />
+            
+            <v-btn :loading="loading" :disabled="loading" color="primary" block outlined @click="createZobo">Create</v-btn>
+          </v-form>
+        </div>
+      </div>
+
+      <upload-dialog :dialog='dialog' @closeDialog="dialog=!dialog;" @uploaded="setImage" ></upload-dialog>
+  </div>
+</template>
+
+
+<script>
+import UploadDialog from '../Dialogs/UploadDialog'
+export default {
+  components: {
+    UploadDialog
+  },
+  data() {
+    return {
+         rules: {
+            length: v =>
+              (v && v.length >= 6) || "password must be least 6 characters",
+            required: v => !!v || "This field is required",
+              size: v =>
+             !v || v.size < 2000000 || "Image must not be greater than 2 MB",            
+          },
+          newZobo:{},
+          loadingC:true,
+          loading:false,
+          zoboCat:[],
+          dialog:false,
+          src:""
+
+    };
+  },
+  methods: {
+    getZoboCat(){
+      this.loadingC=true
+      this.$store.dispatch('getZoboCat').then(res=>{
+      this.loadingC=false
+      res.map(item=>{
+        this.zoboCat.push(item.zobo)
+      })
+    });
+    },
+
+    setImage(data){
+      console.log('====================================');
+      console.log(data.url);
+      console.log('====================================');
+      this.newZobo.cover=data.url;
+      this.src=data.url;
+
+    },
+
+    openUpload(){
+      this.dialog=true
+    },
+
+    createZobo(){
+      if (this.$refs.form.validate()) {
+        this.loading = true;
+        // this.newZobo.type=this.getId(this.newZobo.type)
+        this.$store
+          .dispatch("createZobo", this.newZobo)
+          .then(() => {
+            this.newZobo = {};
+            this.loading = false;
+            this.$toast.success({
+              title: "Zobo Created",
+              message: "Zobo was created successfull"
+            });
+            this.$router.push({ name: "zobo.list" });
+          })
+          .catch(err => {
+            this.loading = false;
+            if (err.response.data.global) {
+              this.serverErrors = null || Object.values(err.response.data.errors);
+              this.$toast.error({
+                title: "Server Error",
+                message:"Opps! something went wrong"
+              });
+              window.scrollTo(0,50)
+            }else{
+                 this.$toast.error({
+                title: "Server Error",
+                message:err.response.data.msg
+              });
+            }
+          });
+      } else {
+        this.$toast.error({
+          title: "Validation Error",
+          message: "Opps something went wrong, all field required"
+        });
+      }
+    },
+
+    getId(zobo){
+      return this.getZobo.find(item=>zobo === item.zobo)._id
+    }
+  },
+
+  mounted() {
+    this.getZoboCat()
+  },
+
+  computed: {
+       getZobo(){
+         return this.$store.getters.zoboCat
+       }
+  }
+};
+</script>
+
+<style lang="scss">
+.custom-input{
+  padding:10px;
+  border-radius:3px;
+  margin-bottom:10px;
+  width:100%;
+  padding-left:100px;
+
+  & :focus{
+    border:none
+  }
+}
+.placeh{
+  position:absolute;
+  left:10px;
+  top:5px;
+  color:#ccc;
+  font-size:20px
+}
+.create-zobo{
+   margin-top:50px;
+   width: 400px;
+}
+@media (max-width: 767px) {
+.create-zobo{
+   margin-top:50px;
+   width:100%;
+}
+}
+</style>

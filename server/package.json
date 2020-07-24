@@ -1,0 +1,23 @@
+{
+  "name": "buymezobo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.22",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.4.10"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
+  }
+}
