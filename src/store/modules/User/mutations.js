@@ -5,6 +5,10 @@
             setUserPro(state,data){
                 state.profile=data;
             },
+            setFollow(state,data){
+                state.user.follower=data.follower
+                state.user.following=data.following
+            }
     }
 
     

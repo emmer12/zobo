@@ -12,6 +12,9 @@ var middleware = require('./../../middleware/auth');
 router.get('/get',middleware.authenticate,NotificationController.getNotifications)
 
 
+router.post('/mark-as-read',middleware.authenticate,NotificationController.markAsRead)
+
+
 
 
 

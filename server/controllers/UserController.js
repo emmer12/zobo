@@ -8,6 +8,7 @@ const UserController = {
     getUser,
     updateProfile,
     getByUsername,
+    userFilter
     // getUsers,
     // updateProfilePic,
     // search,

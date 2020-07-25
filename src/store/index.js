@@ -10,7 +10,7 @@ import zobo from "./modules/Zobo/"
 import user from "./modules/User/"
 export const store =new Vuex.Store({
     state:{
-      notifications:[]
+      notifications:[],
     },
     modules:{
       auth,

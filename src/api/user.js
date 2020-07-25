@@ -16,16 +16,32 @@ const update=(rootState,data)=>{
     return api.post(endPoint+'/update',data)
 }
 
+const follow=(rootState,data)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+    return api.post(endPoint+'/follow',data)
+}
+
+const unfollow=(rootState,data)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+    return api.post(endPoint+'/unfollow',data)
+}
+
 
 const getUserByUsername=(username)=>{
     return api.get(endPoint+'/'+username)
 }
 
-
+const getFollow=(rootState,data)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+    return api.get(endPoint+'/get-follow/'+data.uid)
+}
 
 
 export default{
    getUser,
    update,
-   getUserByUsername
+   getUserByUsername,
+   getFollow,
+   follow,
+   unfollow
 }

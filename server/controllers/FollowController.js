@@ -74,17 +74,19 @@ function unFollow(req, res) {
 
 
 function getfollow(req, res) {
-    console.log(req.params.uid);
     
-    Followed.find({ user_id: req.params.uid }).exec(function (err, followby) {
-        Following.find({ user_id: req.params.uid }).exec(function (err, following) {
+    let userId=req.params.uid ? req.user._id : req.params.uid;
+    console.log(userId);
+    Follower.find({ user_id: userId }).exec(function (err, followerD) {
+        Following.find({ user_id: userId }).exec(function (err, followingD) {
+               let follower=followerD.length ? followerD[0].follower_id : []
+               let following=followingD.length ? followingD[0].following_id : []
             res.status(200).json({
-                followby,
+                follower,
                 following
             })
         })
     })
-
 }
 
 // function unFollows(req, res) {

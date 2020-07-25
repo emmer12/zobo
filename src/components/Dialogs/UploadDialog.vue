@@ -21,7 +21,7 @@
         <v-form>
           <v-file-input
             accept="image/png, image/jpeg, image/jpg, image/gif"
-            placeholder="Please pick your cover image"
+            :placeholder="from === 'settings' ? 'Please pick your profile image' : 'Please pick your cover image'"
             label="Profile Image"
             :rules="[rules.size,rules.required]"
             prepend-icon="mdi-camera"
@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  props: ["dialog"],
+  props: ["dialog","from"],
 
   data() {
     return {
@@ -56,7 +56,6 @@ export default {
     closeDialog() {
       this.$emit("closeDialog");
     },
-
     processFormImg: function(file) {
       this.isProgress = true;
       this.$store.dispatch("uploadFile",file).then(res => {

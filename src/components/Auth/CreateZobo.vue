@@ -96,12 +96,8 @@ export default {
     },
 
     setImage(data){
-      console.log('====================================');
-      console.log(data.url);
-      console.log('====================================');
       this.newZobo.cover=data.url;
       this.src=data.url;
-
     },
 
     openUpload(){

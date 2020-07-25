@@ -1,6 +1,6 @@
 <template>
   <div>
-          <div class="profile-banner" v-if="profile">
+          <div class="profile-banner" v-if="profile && !loading">
             <div class="d-flex flex-column align-center justify-center">
               <v-avatar
                 size="100"
@@ -11,19 +11,22 @@
 
               <h3 class="title white--text">{{profile.firstname}} {{profile.lastname}}</h3>
               <h3 class="caption pb-2" style="color:rgba(245,245,245,0.7)" >@{{profile.username}}</h3>
-              <div>
-                <v-btn class="mr-2" rounded color="primary" small dark>Following 300</v-btn>
-                <v-btn class="mr-2" rounded color="primary" small dark>Follower 50</v-btn>
+              <div v-if="!loading">
+                <v-btn class="mr-2"  rounded color="primary" small dark>Following {{following.length}}</v-btn>
+                <v-btn class="mr-2" rounded color="primary" small dark>Follower {{follower.length }}</v-btn>
               </div>
-                <v-btn v-if="isLoggedIn" rounded  class="mt-3" outlined color="primary" small dark>Unfollow</v-btn>
+                <div v-if="isLoggedIn" v-show="!loading && user._id!==profile._id">
+                  <v-btn  v-if="follower.includes(user._id)" rounded @click="follow(profile._id)" class="mt-3" outlined color="primary" small dark>Unfollow</v-btn>
+                  <v-btn v-else rounded @click="follow(profile._id)" class="mt-3" outlined color="primary" small dark>Follow</v-btn>
+                </div>
               <br>
-              <v-btn v-if="isLoggedIn && user.username===$route.params.username" :to="{name:'settings'}" color="success" small rounded outlined><v-icon left>mdi-pencil-outline</v-icon> Edit Profile</v-btn>
+              <v-btn v-if="isLoggedIn && user && user.username===$route.params.username" :to="{name:'settings'}" color="success" small rounded outlined><v-icon left>mdi-pencil-outline</v-icon> Edit Profile</v-btn>
 
 
-              <div class="custom-avatar">
+              <!-- <div class="custom-avatar">
                 <v-icon size="150">mdi-heart</v-icon>
                 <img :src="require('./../../assets/images/avatar/avatar.png')" alt="alt">
-              </div>
+              </div> -->
           </div>
           </div>
           <div v-else class="pa-4" v-show="!loading">
@@ -46,53 +49,54 @@ export default {
       dialog: false,
       dialogLog: false,
       pageNotFound: false,
-      following: [],
-      follower: [],
-      
+      follower:[],
+      following:[]
       
     };
   },
   methods: {
     follow(fuid) {
-      if (this.loggedInUser) {
-        if (this.follower.includes(this.loggedInUser._id)) {
+      if (this.isLoggedIn) {
+        console.log(fuid);
+        
+        if (this.follower.includes(this.user._id)) {
           this.$store.dispatch("unfollow", { fuid }).then(() => {
-            let index = this.follower.findIndex(i => i === this.loggedInUser);
+            let index = this.follower.findIndex(i => i === this.user._id);
             this.follower.splice(index, 1);
           });
         } else {
           this.$store.dispatch("follow", { fuid });
-          this.follower.push(this.loggedInUser._id);
+          this.follower.push(this.user._id);
           console.log(this.follower);
         }
       } else {
         this.dialogLog = true;
       }
     },
-    getUser() {
-      this.loading = true;
-      this.$store
-        .dispatch("getUserByName", this.$route.params.username)
-        .then(user => {
-          this.user = user;
-          this.loading = false;
-          this.getRating(user._id)
-          this.$store.dispatch("getFollow", { uid: user._id }).then(follow => {
-            // console.log(follow.data.following);
-            console.log(follow);
+    // getUser() {
+    //   this.loading = true;
+    //   this.$store
+    //     .dispatch("getUserByName", this.$route.params.username)
+    //     .then(user => {
+    //       this.user = user;
+    //       this.loading = false;
+    //       this.getRating(user._id)
+    //       this.$store.dispatch("getFollow", { uid: user._id }).then(follow => {
+    //         // console.log(follow.data.following);
+    //         console.log(follow);
 
-            this.following = follow.following[0]
-              ? follow.following[0].following_id
-              : [];
-            this.follower = follow.followby[0]
-              ? follow.followby[0].followed_id
-              : [];
-          });
-        })
-        .catch(() => {
-          this.pageNotFound = true;
-        });
-    },
+    //         this.following = follow.following[0]
+    //           ? follow.following[0].following_id
+    //           : [];
+    //         this.follower = follow.followby[0]
+    //           ? follow.followby[0].followed_id
+    //           : [];
+    //       });
+    //     })
+    //     .catch(() => {
+    //       this.pageNotFound = true;
+    //     });
+    // },
   },
   watch: {
     $route() {
@@ -102,8 +106,12 @@ export default {
 
   mounted () {
     this.loading=true
-    this.$store.dispatch('getUserByUsername',this.$route.params.username).then(()=>{
-      this.loading=false
+    this.$store.dispatch('getUserByUsername',this.$route.params.username).then((res)=>{
+       this.$store.dispatch("getFollow", { uid: res.data.user._id }).then(res=> {
+         this.follower=res.data.follower
+         this.following=res.data.following
+         this.loading=false
+       })
     })
   },
 

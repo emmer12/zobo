@@ -41,6 +41,10 @@ router.delete('/remove/:id',middleware.authenticate,ZoboController.destroyZobo)
 
 
 
+router.get('/yielded/:zoboId',middleware.authenticate,ZoboController.yieldedZobo)
+
+
+
 
 router.post('/payment',middleware.authenticate,ZoboController.payment)
 

@@ -4,5 +4,5 @@ Vue.use(Vuex);
 
 export default {
       user:null,
-      profile:null
+      profile:null,
     }

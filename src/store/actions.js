@@ -12,5 +12,15 @@ export default {
             })
         })
     },
+    markAsRead({state}) {
+        return new Promise((resolve, reject) => {
+            Api.markAsRead(state).then(res => {
+               resolve(res.data)
+            }).catch(err => {
+                reject(err)
+
+            })
+        })
+    },
       
 }

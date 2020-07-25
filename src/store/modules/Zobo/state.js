@@ -10,5 +10,6 @@ export default {
       gift:{
         init:localStorage.getItem('init') || 1,
       },
-      transactions:[]
+      transactions:[],
+      yield:[]
     }

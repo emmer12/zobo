@@ -15,7 +15,8 @@
           </v-progress-circular>
           updating...
         </div>
-  
+
+
          <div class="edit-list">
         <v-card class="pa-4">
           <h4 class="text-block">Profile Image</h4>
@@ -24,16 +25,16 @@
                 size="100"
                 color="white"
             >
-            <img v-if="user.profile_image" :src="'http://localhost:8000/uploads/'+user.profile_image" alt="alt" />
-            <v-icon size="100">mdi-account-circle-outline</v-icon>
+            <img v-if="user.profile_image" ref="img" :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image" alt="alt" />
             </v-avatar><br>
-            <v-btn fab  color="white" small @click="openEdit('password',user.password)">
+            <v-spacer></v-spacer>
+            <v-btn fab  color="white" small @click="openDialog" >
               <v-icon color="grey">edit</v-icon>
             </v-btn>
-
           </div>
         </v-card>
       </div>
+      <upload-dialog :dialog='dialog' @closeDialog="dialog=!dialog;" @uploaded="setImage" :from="'settings'"></upload-dialog>
 
 
       <div class="edit-list">
@@ -140,9 +141,12 @@
 </template>
 
 <script>
+import UploadDialog from '../Dialogs/UploadDialog'
 export default {
+
   inject: ['theme'],
   components: {
+    UploadDialog
   },
   data() {
     return {
@@ -154,6 +158,9 @@ export default {
     }
   },
   methods: {
+    openDialog(){
+      this.dialog=true
+    },
      openEdit(field,value){
        this.field=field;
        this.value=value;
@@ -177,7 +184,13 @@ export default {
             });
          this.loading=false
        })
+     },
+
+     setImage(data){
+       this.$refs.img.src=data.url
+       this.updateField('profile_image',{target:{value:data.url}})
      }
+     
   },
   computed: {
     user(){

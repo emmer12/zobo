@@ -145,4 +145,4 @@ userSchema.methods.pinAuthToken=function pinAuthToken(){
 
 
 
-let User=module.exports= mongoose.model('user',userSchema)
+let User=module.exports= mongoose.model('users',userSchema)

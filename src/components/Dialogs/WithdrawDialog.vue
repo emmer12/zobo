@@ -28,7 +28,7 @@
           type="number"
           v-model="amount.amount"
           prepend-inner-icon="mdi-currency-usd"
-           :rules="[rules.required,rules.upto]"
+           :rules="[rules.required,rules.upto,rules.min]"
            :loading="loading"
         ></v-text-field>
 
@@ -49,6 +49,7 @@ export default {
        rules: {
         required: v => !!v || "This field is required",
         upto: v =>v <= this.balance || "Insufficient fund",
+        min: v =>v == 2 || "You can only withdraw $2 and above",
          },
       amount:{},
       loading:false,

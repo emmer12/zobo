@@ -66,6 +66,13 @@ const getTrans=(rootState) => {
 }
 
 
+const getYield=(rootState,data) => {
+    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+    return api.get(endPoint + '/yielded/'+data)
+}
+
+
+
 export default {
     create,
     getZoboCat,
@@ -77,5 +84,6 @@ export default {
     pay,
     getTrans,
     getIdVisitor,
-    withdraw
+    withdraw,
+    getYield
 }

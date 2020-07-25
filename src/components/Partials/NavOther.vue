@@ -32,7 +32,7 @@
       </v-btn>-->
       
 
-      <div class="mx-4 mt-2" v-if="isLoggedIn"  @click="notifyShow=true" >
+      <div class="mx-4 mt-2" v-if="isLoggedIn" style="cursor:pointer"  @click="openNote" >
         <v-badge color="success" :content="count || '0'">
           <v-icon  size="30">mdi-alarm-light-outline</v-icon>
         </v-badge>
@@ -101,6 +101,20 @@
 
     <v-navigation-drawer app color="#fff" class="drawer" temporary absolute v-model="drawer">
       <section class="side-bar d-flex d-sm-none">
+        <div style="background:#333;height:150px;">
+          <v-icon>mdi-account-circle</v-icon>
+          {{user && user.username}}
+          <div class="d-flex flex-direction-row ">
+            <div style="text-align:center">
+              Follower
+              <span>{{follower.length}}</span>
+            </div>
+            <div style="text-align:center">
+              Followeing
+              <span>{{following.length}}</span>
+            </div>
+          </div>
+        </div>
         <router-link
           tag="div"
           :to="{name:'zobo.list'}"
@@ -126,7 +140,7 @@
     </v-navigation-drawer>
 
     <transition v-if="isLoggedIn"  enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
-      <notifications-view :notifications="notifications" v-show="notifyShow" @close="notifyShow=false"></notifications-view>    
+      <notifications-view :notifications="notifications" :count="count" v-show="notifyShow" @close="notifyShow=false"></notifications-view>    
     </transition> 
  
   </div>
@@ -144,7 +158,9 @@ export default {
     return {
       dropdownPro: false,
       drawer: false,
-      notifyShow:false
+      notifyShow:false,
+      follower:[],
+      following:[]
     };
   },
 
@@ -154,6 +170,12 @@ export default {
     },
     notify(){
       this.$store.dispatch('getNotifications')
+    },
+    openNote(){
+     this.notifyShow=true,
+     this.$store.dispatch('markAsRead').then(()=>{
+       
+     })
     }
   },
 
@@ -165,6 +187,10 @@ export default {
   },
   mounted () {
     this.notify()
+     this.$store.dispatch("getFollow").then(res=> {
+         this.follower=res.data.follower
+         this.following=res.data.following
+       })
   },
 
   computed: {

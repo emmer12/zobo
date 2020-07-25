@@ -10,7 +10,14 @@ const get=(state)=>{
 }
 
 
+const markAsRead=(state)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + state.auth.token
+    return api.post(endPoint+'/mark-as-read')
+}
+
+
 export default{
-    get
+    get,
+    markAsRead
 }
 

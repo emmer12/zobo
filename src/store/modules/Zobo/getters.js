@@ -22,5 +22,8 @@ export default {
     },
     transactions(state){
         return state.transactions
+    },
+    yield(state){
+        return state.yield
     }
 }

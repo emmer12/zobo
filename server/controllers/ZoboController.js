@@ -5,7 +5,7 @@ const Notification= require("./../modules/notification")
 const Payment= require("./../modules/payment")
 const {check,validationResult}=require('express-validator')
 const fs = require('fs')
-
+const UserController=require('./UserController')
 
 
 
@@ -19,7 +19,8 @@ const ZoboController = {
     destroyZobo,
     payment,
     UserTransactions,
-    withdraw
+    withdraw,
+    yieldedZobo,
 }
 
 
@@ -347,6 +348,19 @@ function withdrawFail(res) {
     res.status(400).json({
         error: true,
         msg: "tranzaction fail"
+    })
+}
+
+
+
+
+function yieldedZobo(req,res){
+    let user_id=req.user._id;
+    let zobo_id=req.params.zoboId;
+    Payment.find({owner_id:user_id,type:'deposit',zobo_id:zobo_id}).populate('sender_id').exec(function(err,yielded){
+        res.status(200).json({
+            yielded
+        })
     })
 }
 

@@ -32,6 +32,8 @@ router.post('/follow',middleware.authenticate,FollowController.follow)
 
 router.post('/unfollow',middleware.authenticate,FollowController.unFollow)
 
+router.get('/get-follow/:uid',middleware.authenticate,FollowController.getfollow)
+
 
 
 var upload=multer({storage:storage,limits:{fileSize:2000000}}).single('file');

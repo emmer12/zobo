@@ -21,6 +21,20 @@
 
     <div class="dashboard">
       <section class="side-bar d-none d-sm-flex">
+        <div style="background:#333;height:150px;">
+          <v-icon>mdi-account-circle</v-icon>
+          {{user && user.username}}
+          <div class="d-flex flex-direction-row ">
+            <div style="text-align:center">
+              Follower
+              <span>{{ follower.length }}</span>
+            </div>
+            <div style="text-align:center">
+              Followeing
+              <span>{{ following.length}}</span>
+            </div>
+          </div>
+        </div>
         <router-link  tag="div" :to="{name:'zobo.list'}" :class="{'active':$route.name=='zobo.list'}">
           <v-icon left>mdi-home-lightbulb-outline</v-icon>Home
         </router-link>
@@ -77,7 +91,9 @@ export default {
       rules: {
         length: v => (v && v.length == 4) || "pin must be least 4 digit",
         required: v => !!v || "This field is required"
-      }
+      },
+      follower:[],
+      following:[],
     };
   },
   methods: {
@@ -114,11 +130,16 @@ export default {
     }
   },
 
-  mounted() {},
+  mounted() {
+     this.$store.dispatch("getFollow").then(res=> {
+         this.follower=res.data.follower
+         this.following=res.data.following
+       })
+  },
 
   computed: {
     user() {
-      return { name: "emmer" };
+       return this.$store.getters.user
     }
   }
 };

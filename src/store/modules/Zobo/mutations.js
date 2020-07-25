@@ -27,6 +27,9 @@
             },
             setTransaction(state,data){
                 state.transactions=data
+            },
+            setYield(state,data){
+                state.yield=data
             }
             
 

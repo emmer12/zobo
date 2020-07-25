@@ -1,9 +1,15 @@
 <template>
   <div class="notify">
+      
       <div class="close pa-2" @click="closeNoti">
           <v-icon size="30">mdi-close</v-icon>
       </div>
-      <v-container grid-list-md class="mt-8">
+       <div v-if="notifications.length<=0" class="mt-10">
+        <v-alert type="info" :value="true">
+          No new Notification
+        </v-alert>
+      </div>
+      <v-container v-else grid-list-md class="mt-8">
            <!-- <v-card class="elevation-1" v-for="(item, index) in notifications" :key="index">
               <v-icon v-if="item.type==='payment'" color="primary">mdi-contactless-payment </v-icon>
               <v-icon v-if="item.type==='withdrawer'" color="primary">mdi-minus-box </v-icon>
@@ -36,7 +42,7 @@
 
 <script>
 export default {
-    props: ['notifications'],
+    props: ['notifications','count'],
     methods: {
         closeNoti(){
             this.$emit('close')

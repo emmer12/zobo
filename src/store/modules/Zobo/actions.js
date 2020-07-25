@@ -165,6 +165,18 @@ export default {
     },
 
 
+    getYield({commit,rootState},data) {
+        return new Promise((resolve, reject) => {
+            Api.getYield(rootState,data).then(res => {
+               resolve(res.data)
+               commit('setYield',res.data.yielded)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    },
+
+
     setZoboVal({commit},val){
         commit('setZoboVal',val)
     }
