@@ -11,34 +11,20 @@
       >
         <router-view></router-view>
       </transition>
-<!-- 
-       <div class="confirm notifivation" style="max-width:360px; position:fixed;right:0px;bottom:0px">
-        <transition enter-active-class="animated fadeInRight" leave-active-class="animated fadeOut">
-            <v-alert  v-if="user && !user.bio" color="green-darken-3" type="error" dismissible v-model="show">
-            <span class="subheadiing">Your Bio is empty,</span><br>
-            <p>write somethig about yourself <router-link :to="{name:'profile.edit'}"><b>Click</b></router-link></p>
-        </v-alert>
-        </transition>
-      </div> -->
-      <!-- <div class="confirm" style="max-width:360px; position:fixed;right:0px;bottom:0px">
-        <transition enter-active-class="animated fadeInRight" leave-active-class="animated fadeOut">
-            <v-alert v-if="user && user.bio && (!user.facebook || !user.twitter || !user.youtube)" color="green-darkeen-3" type="error" dismissible v-model="show">
-            <span class="subheadiing">Link up your social media with Tunner</span><br>
-           <router-link :to="{name:'profile.edit'}"><b>Click</b></router-link>
-        </v-alert>
-        </transition>
-      </div> -->
+
     </v-content>
-    
+    <cheers :cheers="'yesss'"></cheers>
   </v-app>
 </template>
 
 <script>
 import NavBar from "./components/Partials/NavBar";
+import Cheers from "./components/Partials/Cheers";
 export default {
   name: "App",
   components: {
-    NavBar
+    NavBar,
+    Cheers
   },
   data() {
     return {
@@ -56,7 +42,7 @@ export default {
     this.$store.dispatch("getUser");
   },
   computed: {
-  }
+  },
 };
 </script>
 

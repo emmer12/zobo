@@ -63,11 +63,23 @@
             </v-btn>
           </li>
         </ul>
+        
 
-        <v-btn v-if="isLoggedIn" color="primary" text @click="dropdownPro=!dropdownPro">
+        <v-btn v-if="user && !user.profile_image" color="primary" text @click="dropdownPro=!dropdownPro">
           <v-icon color="grey">mdi-account-circle</v-icon>
           <v-icon right color="grey">mdi-chevron-down</v-icon>
         </v-btn>
+          <div v-else  @click="dropdownPro=!dropdownPro" style="cursor:pointer">
+             <v-avatar
+                size="40"
+                color="white"
+            >
+            <img v-if="user && user.profile_image" ref="img" :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image" alt="alt" />
+            </v-avatar>
+             <v-icon right color="grey">mdi-chevron-down</v-icon>
+          </div>
+        
+        
       </div>
 
       <transition
@@ -102,8 +114,16 @@
     <v-navigation-drawer app color="#fff" class="drawer" temporary absolute v-model="drawer">
       <section class="side-bar d-flex d-sm-none">
         <div style="background:#333;height:150px;">
-          <v-icon>mdi-account-circle</v-icon>
-          {{user && user.username}}
+         <v-icon v-if="user && !user.profile_image">mdi-account-circle</v-icon>
+             <v-avatar
+                v-else
+                size="40"
+                color="white"
+            >
+            <img v-if="user && user.profile_image" ref="img" :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image" alt="alt" />
+            </v-avatar>
+            
+           <span class="ml-2"> {{user && user.username}}</span>
           <div class="d-flex flex-direction-row ">
             <div style="text-align:center">
               Follower

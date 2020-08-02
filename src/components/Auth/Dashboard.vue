@@ -22,8 +22,16 @@
     <div class="dashboard">
       <section class="side-bar d-none d-sm-flex">
         <div style="background:#333;height:150px;">
-          <v-icon>mdi-account-circle</v-icon>
-          {{user && user.username}}
+          <v-icon v-if="user && !user.profile_image">mdi-account-circle</v-icon>
+             <v-avatar
+                v-else
+                size="40"
+                color="white"
+            >
+            <img v-if="user && user.profile_image" ref="img" :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image" alt="alt" />
+            </v-avatar>
+            
+           <span class="ml-2"> {{user && user.username}}</span>
           <div class="d-flex flex-direction-row ">
             <div style="text-align:center">
               Follower
@@ -43,7 +51,7 @@
           <v-icon left>mdi-cash-100</v-icon>Balance
         </router-link>
 
-        <router-link  tag="div" :to="{name:'profile'}" :class="{'active':$route.name=='profile'}">
+        <router-link  tag="div" :to="{name:'settings'}" :class="{'active':$route.name=='settings'}">
           <v-icon left>mdi-cog</v-icon>Settings
         </router-link>
 

@@ -86,6 +86,8 @@ function userFilter(user) {
     newUser._id = user._id
     newUser.username = user.username
     newUser.balance = user.balance
+    newUser.phoneNo = user.phoneNo
+    newUser.birthday = user.birthday
     newUser.firstname = user.firstname
     newUser.lastname = user.lastname
     newUser.email = user.email
