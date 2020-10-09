@@ -1,25 +1,18 @@
 <template>
   <div>
-
-
-
-    <nav-other v-show="$route.name!=='access.signup' && $route.name!=='access.signin'" v-if="$route.name!=='home'"></nav-other>
-    <nav-home  v-else></nav-home>
-
+    <nav-other v-show="$route.name!=='access.signup' && $route.name!=='access.signin'" ></nav-other>
   </div>
 </template>
 
 
-
-
 <script>
 import NavOther from './../Partials/NavOther'
-import NavHome from './../Partials/NavHome'
+// import NavHome from './../Partials/NavHome'
 
 export default {
   components:{
     NavOther,
-    NavHome
+    // NavHome
   },
   data: () => ({
     drawer: false,
@@ -110,18 +103,37 @@ export default {
   }
 
   .bar {
+    &.added{
+      span{
+        background: red;
+        &:nth-child(1){
+        transform: rotate(-41deg);
+        position: relative;
+        bottom: -12px;
+        }
+        &:nth-child(2){
+          transform: scale(1.5);
+        }
+        &:nth-child(3){
+            transform: rotate(45deg);
+            top: -12px;
+            position: relative;
+        
+        }
+      }
+    
+    }
+
     width: 70%;
     & span{
-    height:5px;
+    height:6px;
     width:100%;
     margin-top:4px;
-    background: #ed6b35;
+    background: #e50913;
     display: block;
-    border-radius:10px;
-
-    animation: animateBar 1s ease-in-out;
-
-
+    border-radius:3px;
+    transition: 0.3s;
+    
 
     &:nth-child(2){
      width: 10px;
@@ -129,9 +141,7 @@ export default {
      border-radius:5px;
      text-align:center;
      margin-left: 12px;
-
     }
-
     }
 
   }

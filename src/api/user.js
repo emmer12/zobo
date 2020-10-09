@@ -28,12 +28,32 @@ const unfollow=(rootState,data)=>{
 
 
 const getUserByUsername=(username)=>{
-    return api.get(endPoint+'/'+username)
+    return api.get(endPoint+'/z/'+username)
 }
 
-const getFollow=(rootState,data)=>{
+const getFollow=(rootState)=>{
     api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
-    return api.get(endPoint+'/get-follow/'+data.uid)
+    return api.get(endPoint+'/get-follow')
+}
+
+const getProfileFollow=(rootState,data)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+    return api.get(endPoint+'/get-profile-follow/'+data.uid)
+}
+
+const getCurrency=()=>{
+    return api.get(endPoint+'/get-currency')
+}
+
+const setCurrency=(rootState,data)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+    return api.patch(endPoint+'/set-currency',{data})
+}
+
+
+const sendEmail=(rootState)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+    return api.post(endPoint+'/send-email')
 }
 
 
@@ -42,6 +62,10 @@ export default{
    update,
    getUserByUsername,
    getFollow,
+   getProfileFollow,
    follow,
-   unfollow
+   unfollow,
+   getCurrency,
+   setCurrency,
+   sendEmail
 }

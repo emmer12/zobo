@@ -7,7 +7,8 @@ const Follower = require("./../modules/follower")
 const FeedsController = {
     follow,
     unFollow,
-    getfollow
+    getfollow,
+    getProfollow
 }
 
 async function follow(req, res) {
@@ -75,8 +76,26 @@ function unFollow(req, res) {
 
 function getfollow(req, res) {
     
-    let userId=req.params.uid ? req.user._id : req.params.uid;
-    console.log(userId);
+    let userId=req.user._id 
+    console.log('====================================');
+    console.log(req.user._id);
+    console.log('====================================');
+    Follower.find({ user_id: userId }).exec(function (err, followerD) {
+        Following.find({ user_id: userId }).exec(function (err, followingD) {
+               let follower=followerD.length ? followerD[0].follower_id : []
+               let following=followingD.length ? followingD[0].following_id : []
+            res.status(200).json({
+                follower,
+                following
+            })
+        })
+    })
+}
+
+
+
+function getProfollow(req, res) {
+    let userId=req.params.uid 
     Follower.find({ user_id: userId }).exec(function (err, followerD) {
         Following.find({ user_id: userId }).exec(function (err, followingD) {
                let follower=followerD.length ? followerD[0].follower_id : []

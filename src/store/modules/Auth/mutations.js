@@ -13,6 +13,7 @@
             retrieveToken(state,{token,root,user}){
                 state.token=token
                 root.user.user=user
+                root.user.role=user.role
             
             },
             
@@ -27,6 +28,11 @@
 
             destroyToken(state,rootState){
                 state.token=null
+                state.pinToken=null
+                rootState.user.user=null
+
+            },
+            destroyPinToken(state,rootState){
                 state.pinToken=null
                 rootState.user.user=null
 

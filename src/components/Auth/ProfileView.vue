@@ -3,7 +3,7 @@
     <v-layout column v-if="user">
          <div class="edit-list">
           <v-card class="pa-4">
-            <h4 class="text-block">Profile Image f</h4>
+            <h4 class="text-block">Profile Image</h4>
             <div class="d-flex align-center justify-ceneter">
               <v-avatar
                   size="100"

@@ -8,6 +8,8 @@ import { store } from './store/'
 import CxltToastr from "cxlt-vue2-toastr";
 import VueJwtDecode from "vue-jwt-decode"
 import moment from "moment"
+import Carousel3d from 'vue-carousel-3d';
+ 
 // import LottieAnimation from "lottie-web"
 // import  'lottie-vuejs'
 // import firebase from 'firebase/app'
@@ -38,6 +40,10 @@ Vue.use(VueSocialSharing);
 Vue.use(infiniteScroll)
 
 
+Vue.use(Carousel3d)
+
+
+
 // ************************************************** //
 //           Filtered                                 //
 // **************************************************//
@@ -49,6 +55,17 @@ Vue.filter("formatDate",function(value){
     }
 })
 
+Vue.filter("timeAgo",function(value){
+    if(value){
+        return moment(String(value)).fromNow('dd')
+    }
+})
+
+
+
+Vue.filter('capFirst',function(value){
+    return value.charAt(0).toUpperCase() + value.substr(1)
+})
 // ************************************************** //
 //            JWT Decode init il i zation            //
 // **************************************************//
@@ -115,6 +132,17 @@ router.beforeEach((to, from, next) => {
           next();
       }
   }
+  else if (to.matched.some(record => record.meta.requiresSuperAuth)) {
+    if (!store.getters.loggedIn && store.getters.role!=="Super Admin") {
+       alert()
+        next({
+            name: 'zobo.list',
+        })
+    }
+    else {
+        next();
+    }
+}
   else if (to.matched.some(record => record.meta.requiresVisitor)) {
       if (store.getters.loggedIn) {
           next({

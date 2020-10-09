@@ -21,7 +21,8 @@ export default {
     };
   },
   created() {
-    let dis = this;
+       if (localStorage.getItem('token')) {
+             let dis = this;
     setTimeout(function() {
       let bDay = dis.user.birthday.split("-")[2].substr(0, 2);
       let bMonth = dis.user.birthday.split("-")[1].substr(0, 2);
@@ -53,6 +54,7 @@ export default {
         alert("today is not your birthday");
       }
     }, 2000);
+       }
   },
   
   mounted() {

@@ -1,10 +1,11 @@
 <template>
   <div class="home-nav-con">
+    <div class="right-nav"></div>
     <v-container>
       <div class="inner-con">
         <v-layout row wrap>
-          <v-flex xs1 sm5 md3>
-            <div class="d-flex align-center ml-10">
+          <v-flex xs1 sm5 md1>
+            <div class="align-center ml-10">
               <router-link :to="{name:'home'}">
                 <v-img
                   alt="App Logo"
@@ -12,37 +13,73 @@
                   contain
                   src="./../../assets/images/logo.png"
                   transition="scale-transition"
-                  width="70"
+                  width="50"
                 />
               </router-link>
             </div>
           </v-flex>
+          <v-flex>
+             <v-row  class="ma-4 d-none d-sm-flex">
+                <div class="title">BMZ</div>
+              <div class="c-wrapper" v-if="user">
+                <div class="c-select" :class="{open:openCurrency}">
+                  <div class="c-trigger" @click="openCurrency=!openCurrency">
+                    <span>{{user.currency || 'USD'}}</span>
+                    <v-icon>mdi-chevron-down</v-icon>
+                  </div>
+
+                  <div class="c-options" v-if="currencies.length">
+                    <span
+                      class="c-option"
+                      v-for="(item, index) in currencies"
+                      :key="index"
+                      :class="{selected:user.currency==item.unit}"
+                      :data-value="item.unit"
+                      @click="setCurrency"
+                    >{{item.unit}}</span>
+                    <!-- <span class="c-option" :class="{selected:currency=='NAIRA'}" data-value="NAIRA" @click="setCurrency">NAIRA</span> -->
+                  </div>
+                </div>
+              </div>
+              </v-row>  
+           </v-flex>
+              <!-- <v-row class="ma-10 d-none d-sm-flex"> -->
+             
+            <!-- </v-row> -->
           <v-spacer></v-spacer>
 
           <v-flex xs1 sm7 md6 d-none d-sm-flex>
-            <div class="right-nav"></div>
             <ul class="d-flex">
               <li>
-                <router-link :to="{name:'home'}">Event</router-link>
+                <router-link :to="{name:'home'}">Charity Forum</router-link>
               </li>
               <li>
-                <router-link :to="{name:'about'}">Explore</router-link>
+                <router-link :to="{name:'about'}">FAQ</router-link>
               </li>
               <li v-show="!isLoggedIn">
-                <v-icon left>mdi-account-plus</v-icon>
-                <router-link :to="{name:'signup'}">Sign Up</router-link>
+                <router-link :to="{name:'access.signup'}">Sign Up</router-link>
               </li>
               <li>
-                <v-btn color="primary" :to="{name:'signin'}" v-show="!isLoggedIn" outlined>
+                <v-btn color="primary" :to="{name:'access.signin'}" v-show="!isLoggedIn" outlined>
                   <span class="mr-2">Sign In</span>
                 </v-btn>
               </li>
             </ul>
-
-            <v-btn v-if="isLoggedIn" color="primary" text @click="dropdownPro=!dropdownPro">
-              <v-icon color="white">mdi-account-circle</v-icon>
-              <v-icon right color="white">mdi-chevron-down</v-icon>
-            </v-btn>
+            <div
+              v-if="user && user.profile_image!=='profile.png'"
+              @click="dropdownPro=!dropdownPro"
+              style="cursor:pointe;z-index:999;position:relative"
+            >
+              <v-avatar size="40" color="white">
+                <img
+                  v-if="user && user.profile_image"
+                  ref="img"
+                  :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image"
+                  alt="alt"
+                />
+              </v-avatar>
+              <v-icon right color="grey">mdi-chevron-down</v-icon>
+            </div>
           </v-flex>
 
           <v-btn @click="toggleDrawer" class="d-flex d-sm-none mr-10" icon color="primary">
@@ -60,12 +97,12 @@
       <div class="banner-home">
         <div id="col1" class="pl-10 pt-10">
           <div class="info-div">
-            <h1>Giving is mutual suprise someone with a drink on their special day</h1>
+            <h1 class="t">Giving is mutual suprise someone with a drink on their special day</h1>
             <v-spacer class="my-5"></v-spacer>
-            <v-btn fab icon color="primary " class="btn elevation-10 mr-10">
+            <v-btn fab icon color="primary " class="btn g-d elevation-10 mr-10">
               <v-icon>mdi-arrow-down</v-icon>
             </v-btn>
-            <v-btn color="primary" large>
+            <v-btn color="primary" class="g-s" large>
               Get started
               <v-icon right>mdi-arrow-right</v-icon>
             </v-btn>
@@ -282,11 +319,46 @@
 </template>
 
 <script>
+import {mapGetters } from "vuex"
+import {TimelineLite} from "gsap/all"
 export default {
-   computed: {
-    isLoggedIn() {
-      return this.$store.getters.loggedIn;
+  data() {
+    return {
+      toggleDrawer: true,
+      openCurrency:false,
+      drawer: false,
+
+
+    };
+  },
+  methods: {
+    setCurrency(e){
+      let currency=e.target.getAttribute('data-value')
+      this.openCurrency=false
+      this.$store.dispatch('setCurrency',currency).then(()=>{
+        this.$store.dispatch('getUser')
+      })
     }
+
+  },
+  created(){
+    
+  },
+  computed: {
+    ...mapGetters({
+      user: "user",
+      isLoggedIn: "loggedIn",
+      count: "notificationsCount",
+      notifications: "notifications",
+      currencies:'currencies'
+    })
+  },
+  mounted(){
+    // let get=this.$ref.get
+    let timeline=new TimelineLite()
+    timeline.from('.t',{y:100,opacity:0})
+    timeline.from('.g-d',{y:50,opacity:0})
+    timeline.from('.g-s',{scale:0.5,opacity:0})
   }
 };
 </script>
@@ -295,20 +367,23 @@ export default {
 .home-nav-con {
   height: 100vh;
   width: 100vw;
-  & .inner-con {
-    height: 50px;
-    // background: rgba($color: #fff, $alpha: 0.1);
-    margin-top: 30px;
-
     & .right-nav {
       height: 100vh;
       width: 100%;
       position: absolute;
-      left: 300px;
+      left:300px;
       z-index: 0;
       top: 0;
       background-image: url(./../../assets/images/bg/bgh1.png);
     }
+  & .inner-con {
+    height: 50px;
+    // background: rgba($color: #f5f, $alpha: 0.1);
+    margin-top: 30px;
+    z-index:99999;
+    position: relative;
+
+  
 
     & ul {
       position: relative;

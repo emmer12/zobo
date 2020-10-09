@@ -1,19 +1,21 @@
 // const jwt = require('jsonwebtoken');
 const User = require("./../modules/users")
-// const Mailer = require('../config/mailer')
+const Zobo = require("./../modules/zobo")
+const Currency = require("./../modules/currency")
+const { currencyConverter } = require("./../utility")
+const Mailer = require('../config/mailer')
 
 // let mongoose = require('mongoose');
+
 
 const UserController = {
     getUser,
     updateProfile,
     getByUsername,
-    userFilter
-    // getUsers,
-    // updateProfilePic,
-    // search,
-    // remove,
-    // confirmUser,
+    userFilter,
+    getCurrency,
+    setCurrency,
+    sendMail,
     // requestPasswordReset,  
     // passwordReset,
     // confirmPasswordReset
@@ -92,9 +94,11 @@ function userFilter(user) {
     newUser.lastname = user.lastname
     newUser.email = user.email
     newUser.location = user.location
+    newUser.role = user.role
     newUser.createdAt = user.createdAt
     newUser.profile_image = user.profile_image
     newUser.confirmed = user.confirmed
+    newUser.currency = user.currency
     return newUser
 }
 
@@ -190,10 +194,11 @@ function update(res, data, id) {
 function getByUsername(req,res) {
     let username=req.params.username;
 
-    User.findOne({username:username}).exec(function (err,user) { 
+    User.findOne({username:username}).exec(async function (err,user) { 
        if (user) {
         res.status(200).json({
             user:userFilter(user),
+            zobo:await Zobo.find({user_id:user._id}).sort({createdAt:-1}).exec()
         })
        }else{
         res.status(400).json({
@@ -205,13 +210,37 @@ function getByUsername(req,res) {
 }
 
 
-// function userPosts(req, res, next) {
-//     res.status(400).json({
-//         msg: "No post found"
-//     })
-// }
+function getCurrency(req, res) {
+    Currency.find({}).exec(function(err,currency){
+       if (err) {
+           res.status(400).json({
+               msg: "No post found"
+           })
+       }
+       res.status(200).json({
+        currency
+       })
+    })
+}
+
+function setCurrency(req,res) {
+    let converted=currencyConverter(req.user.currency,req.body.data,req.user.balance)
+    User.findOneAndUpdate({ _id: req.user._id },{currency:req.body.data,balance:converted } , { new: true }).exec(function (err, user) {
+        if (user) {
+            res.status(200).json({
+                success: true,
+            })
+        }
+    })
+  }
 
 
+  function sendMail() { 
+    Mailer.randomEmailwithTemplate()
+      console.log('====================================');
+      console.log('sebnding.....');
+      console.log('====================================');
+  }
 
 
 // function confirmUser(req, res) {

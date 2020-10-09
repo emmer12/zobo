@@ -32,10 +32,24 @@
                   <v-spacer></v-spacer>
                   <span class="caption grey--text">{{item.createdAt | formatDate }}</span> 
               </div>
+          </v-list>
+            <v-list class="elevation-1 pa-2 mt-2" v-if="item.type==='z-created'">
+              <div class="d-flex">
+                <v-icon  color="primary">mdi-post-outline </v-icon>
+                <span class="pl-3">Someone but you a lunch </span>
+                <v-spacer></v-spacer>
+                <v-icon  color="primary">mdi-alarm-light-outline </v-icon>
+              </div>
+              
+              <div class="d-flex pa-2">
+                  <b></b>
+                  <v-spacer></v-spacer>
+                  <span class="caption grey--text">{{item.createdAt | formatDate }}</span> 
+              </div>
 
           </v-list>
         </div>
-        
+        <v-btn rounded small outlined tag="div" :to="{name:'all.notification'}" color="primary" class="elevation-0 float-right view-all-b mt-3"> View All <v-icon right>mdi-arrow-right</v-icon> </v-btn>
         </v-container>
   </div>
 </template>
@@ -48,6 +62,11 @@ export default {
             this.$emit('close')
         }
     },
+    watch: {
+      $route(){
+        this.$emit('close')
+      }
+    }
 }
 </script>
 
@@ -68,5 +87,7 @@ export default {
            cursor: pointer;
            
        }
+
+     
    }
 </style>

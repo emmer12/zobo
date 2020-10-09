@@ -25,6 +25,11 @@ let zoboSchema=mongoose.Schema({
     required:false,
     default:0
   },
+  currency:{
+    type:String,
+    required:false,
+    default:'USD'
+  },
   link:{
     type:String,
     required:false

@@ -1,87 +1,97 @@
 <template>
-  <div class="banner" >
-    <v-container grid-list-md >
-      <v-layout row wrap>
-        <v-flex md12 style="position:relative">
-          <div class="overlay" ></div>
-          <div class="right" style="z-index:0;position:relative">
-              <vue-flux
-                :options="vfOptions"
-                :images="vfImages"
-                :transitions="vfTransitions"
-                ref="slider">
-                <template v-slot:preloader>
-                    <flux-preloader />
-                </template>
-              </vue-flux>
-          </div>
-        </v-flex>
-      </v-layout>
-      <v-row></v-row>
+  <div class="banner">
+    <v-container grid-list-md>
+      <div class="banner-div">
+        <div class="info-div">
+          <h1 class="primary--text">Get gift as cash on special day </h1>
+           <p class="white--text body-1">Start recieving money gifts from friends and family on your special day</p>
+           <div style="height:150px">
+              <v-btn @click="next" fab color="default" class="btn g-d elevation-10 mr-10">
+            <v-icon>mdi-arrow-down</v-icon>
+            </v-btn>
+            <v-btn :to="{name:'access.signup'}" color="primary" class="g-s" large>
+              Get started
+              <v-icon right>mdi-arrow-right</v-icon>
+            </v-btn>
+           </div>
+        </div>
+
+        <div class="right">
+          <send-love></send-love>
+        </div>
+      </div>
+
     </v-container>
   </div>
 </template>
 
 <script>
-import {
-   VueFlux,
-   FluxPreloader,
-} from 'vue-flux';
-
+import {} from "vue-flux";
+// import Gift from './../svg/gift'
+import SendLove from './../svg/sendlove'
 export default {
   components: {
-    VueFlux,
-    FluxPreloader,
+    // Gift,
+    SendLove
   },
-  data: () => ({
-    vfOptions: {
-      autoplay: true
-    },
-    vfImages: [
-      require("./../../assets/images/banner/piano.jpg"),
-      require("./../../assets/images/banner/guitar.jpg"),
-      require("./../../assets/images/banner/guitar2.jpg"),
-      require("./../../assets/images/banner/guitar3.jpg"),
-      require("./../../assets/images/banner/guitar4.jpg"),
-      require("./../../assets/images/banner/vocal.jpg"),
-      require("./../../assets/images/banner/vocal2.jpg"),
-      require("./../../assets/images/banner/vocal3.jpg"),
-      require("./../../assets/images/banner/vocal4.jpg"),
-      require("./../../assets/images/banner/drum1.jpg"),
-      require("./../../assets/images/banner/drum3.jpg")
-    ],
-    vfTransitions: ['fade'],
-  })
+  methods: {
+    next(){
+      alert()
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-.banner{
-   background:url(./../../assets/images/bg/bg1.png);
-   background-position:bottom;
-   background-size: cover;
-   & .left{
-      & h1{
-         font-weight: 800;
-         font-size: 30px;
-         padding: 10px;
-      }
-      & p{
-         padding: 10px;
-      }
-   }
+.banner {
+  background: #222;
+  min-height: 450px;
+ .banner-div{
+    display:flex;
+    flex-direction:row;
+  }
+  .info-div{
+    width:60%;
+    position:relative;
+    top:90px;
+
+    h1{
+         font-weight: 900;
+        font-size: 3.4rem;
+        line-height: 64px;
+
+    }
+
+    p{
+      font-size:16px;
+      line-height: 31px;
+    }
+  }
 }
-.overlay{
-  position: absolute;
-  width:100%;
-  height:100%;
-  left:4px;
-  top: 4px;
-  background: url(./../../assets/images/bg/bg5.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  z-index: 1;
-  overflow: hidden;
-  // opacity: 0.5;
+
+
+@media (max-width:460px){
+.banner {
+    .banner-div{
+    flex-direction:column;
+  }
+ 
+  .info-div{
+    width:100%;
+    top:50px;
+    padding:10px;
+
+    h1{
+        font-size: 2.6rem;
+        line-height:45px;
+
+    }
+
+    p{
+      margin-top:20px;
+      line-height: 35px;
+    }
+  }
+}
 }
 </style>

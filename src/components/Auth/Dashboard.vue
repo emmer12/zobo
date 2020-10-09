@@ -21,19 +21,19 @@
 
     <div class="dashboard">
       <section class="side-bar d-none d-sm-flex">
-        <div style="background:#333;height:150px;">
-          <v-icon v-if="user && !user.profile_image">mdi-account-circle</v-icon>
+        <section v-if="user" style="background:#333;height:150px;">
+          <v-icon v-if="user.profile_image=='profile.png'">mdi-account-circle</v-icon>
              <v-avatar
                 v-else
                 size="40"
                 color="white"
             >
-            <img v-if="user && user.profile_image" ref="img" :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image" alt="alt" />
+            <img ref="img" :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image" alt="alt" />
             </v-avatar>
             
            <span class="ml-2"> {{user && user.username}}</span>
-          <div class="d-flex flex-direction-row ">
-            <div style="text-align:center">
+          <div class="d-flex flex-direction-row mt-3">
+            <div style="text-align:center;">
               Follower
               <span>{{ follower.length }}</span>
             </div>
@@ -42,7 +42,7 @@
               <span>{{ following.length}}</span>
             </div>
           </div>
-        </div>
+        </section>
         <router-link  tag="div" :to="{name:'zobo.list'}" :class="{'active':$route.name=='zobo.list'}">
           <v-icon left>mdi-home-lightbulb-outline</v-icon>Home
         </router-link>
@@ -137,6 +137,11 @@ export default {
       }
     }
   },
+  created () {
+    if (this.$route.name==='dashboard') {
+      this.$router.push({ name: "zobo.list" });
+    }
+  },
 
   mounted() {
      this.$store.dispatch("getFollow").then(res=> {
@@ -145,11 +150,11 @@ export default {
        })
   },
 
-  computed: {
-    user() {
-       return this.$store.getters.user
-    }
+computed: {
+  user() {
+      return this.$store.getters.user
   }
+}
 };
 </script>
 
@@ -171,7 +176,7 @@ export default {
     }
 
     & div {
-      display: inline-block;
+      // display: inline-block;
       padding: 10px 10px;
       background: rgba(246, 249, 246, 0.048);
       margin-top: 3px;
@@ -184,10 +189,10 @@ export default {
     }
     & .active {
       background: white;
-      color: #d34a1a;
+      color: #e50913;
 
       & .v-icon {
-        color: #d34a1a;
+        color: #e50913;
       }
     }
   }
@@ -205,7 +210,7 @@ export default {
   height: 60px;
   display: flex;
   flex-direction: row;
-  background: rgba(211, 75, 26, 1);
+  background:#e50913;
   color: rgba(255, 255, 255, 0.7);
   justify-content: space-between;
   align-items: center;
@@ -221,7 +226,7 @@ export default {
   }
 
   & .active {
-    background: #d34a1a;
+    background: #e50913;
     border-radius: 50px;
     height: 90px;
     width: 60px;

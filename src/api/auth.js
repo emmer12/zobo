@@ -20,9 +20,14 @@ const checkPin=(data,state)=>{
 
 }
 
+const passwordRequest=(data)=>{
+    return api.post(endPoint+'/reset-password-request',data)
+
+}
 
 export default{
     create,
     login,
-    checkPin
+    checkPin,
+    passwordRequest
 }

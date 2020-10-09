@@ -14,6 +14,18 @@
     </div>
     <div class="right">
       <v-container grid-list-md>
+         <div class="d-flex d-sm-none bottom-z"> 
+          <v-img
+            alt="App Logo"
+            class="shrink mr-2 img"
+            contain
+            src="./../../assets/images/logo.png"
+            transition="scale-transition"
+            width="100"
+          />
+           <h2>Sign In</h2>
+        </div>
+            <!-- style="text-align:center" -->
         <v-flex>
           <v-card class="pa-5">
             <v-spacer class="ma-5"></v-spacer>
@@ -29,14 +41,15 @@
                 <v-alert type="info" :value="!!vmsg">
                 {{vmsg}}
               </v-alert>
-
+              <h4 class="text-block grey--text mb-2">Username or Email</h4>
               <v-text-field
                 name="username"
                 label="Username or Email"
                 v-model="newUser.username"
                 :rules="[rules.required]"
+                solo
               ></v-text-field>
-
+              <h4 class="text-block mb-2 lighten-5 grey--text" >Password</h4>
               <v-text-field
                 v-model="newUser.password"
                 name="password"
@@ -48,6 +61,7 @@
                 :rules="[rules.required,rules.length]"
                 :type="value ? 'password' : 'text'"
                 @click:append="() => (value = !value)"
+                solo
               ></v-text-field>
 
               <router-link 
@@ -66,14 +80,21 @@
               >Sign In</v-btn>
               <br />
               <br />
-              <router-link tag="b" :to="{name:'signup'}">
-                <span class="mt-6 grey--text" text>Don't have an account?</span>
-              </router-link>
+              <router-link tag="span" :to="{name:'access.signup'}">Don't have an account?</router-link>
+              
+              
+              <br/>
+
+              <v-btn class="mt-4" block color="blue" dark><v-icon left>mdi-facebook</v-icon> Login with facebook</v-btn>
+
             </v-form>
           </v-card>
         </v-flex>
+
+
       </v-container>
     </div>
+     
   </div>
 </template>
 
@@ -177,6 +198,23 @@ export default {
     margin-top: 20px;
   }
 }
+
+.bottom-z{
+  text-align:center;
+  // background:red;
+  flex-direction:column;
+  align-items:center;
+  border-radius:50%;
+  border-bottom: 2px solid #d34a1a;
+  margin-bottom:10px;
+  box-shadow:2px 3px 4px #ddd;
+
+  & h2{
+    color:#d34a1a;
+    padding:10px
+  }
+}
+
 @media screen and (max-width: 640px) {
   .signup-con {
     grid-template-columns: 100%;

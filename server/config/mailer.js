@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer');
+const Email = require('email-templates'); 
+const path=require('path') 
 
 var transporter = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
@@ -23,7 +25,7 @@ function sendConfirmationEmail(user) {
 function sendPasswordResetEmail(user) {
   // setup email data with unicode symbols
   let mailOptions = {
-    from: '"Tunner" <info@tunner.com>', // sender address
+    from: '"Buy Me Zobo" <info@bmz.com>', // sender address
     to: user.email, // list of receivers
     subject: "Password Reset", // Subject line
     html: `<b>To reset your password follow this link <a href="${user.generateResetPasswordLink()}">Click</a> to verify your email</b> ` // html body
@@ -31,7 +33,58 @@ function sendPasswordResetEmail(user) {
      transporter.sendMail(mailOptions)
 }
 
+
+
+function randomEmailwithTemplate(){
+ 
+const email = new Email({
+  message: {
+    from: 'niftylettuce@gmail.com'
+  },
+  // uncomment below to send emails in development/test env:
+  send: true,
+  transport: {
+    jsonTransport: true
+  }
+});
+ 
+email
+  .send({
+    template: 'mars',
+    message: {
+      to: 'elon@spacex.com'
+    },
+    locals: {
+      name: 'Elon'
+    }
+  })
+  .then(res=>{
+    console.log('====================================');
+    console.log(res);
+    console.log('====================================');
+    })
+  .catch(console.error);
+}
+
+
+
+  // .render({
+  //     path: 'mars/html',
+  //     juiceResources: {
+  //       preserveImportant: true,
+  //       webResources: {
+  //         // view folder path, it will get css from `mars/style.css`
+  //         relativeTo: path.resolve('mars')
+  //       }
+  //     }
+  //   }, {
+  //     name: 'Elon'
+  //   })
+
+
+
 module.exports = {
   sendConfirmationEmail,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  randomEmailwithTemplate
 }

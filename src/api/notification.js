@@ -9,6 +9,10 @@ const get=(state)=>{
     return api.get(endPoint+'/get')
 }
 
+const getAll=(state)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + state.auth.token
+    return api.get(endPoint+'/get-all')
+}
 
 const markAsRead=(state)=>{
     api.defaults.headers.common['Authorization']='Bearer ' + state.auth.token
@@ -18,6 +22,7 @@ const markAsRead=(state)=>{
 
 export default{
     get,
+    getAll,
     markAsRead
 }
 

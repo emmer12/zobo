@@ -28,7 +28,7 @@ router.post('/check-pin',middleware.authenticate,AuthController.checkPin)
 
 
 
-// router.post('/password-reset',AuthController.passwordReset);
+router.post('/reset-password-request',AuthController.requestPasswordReset);
 
 
 

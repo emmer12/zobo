@@ -4,7 +4,8 @@ const Notification= require("../modules/notification")
 
 
 const NotificationController = {
-    getNotifications,   
+    getNotifications,  
+    getAllNotifications, 
     markAsRead
 }
 
@@ -22,11 +23,32 @@ function getNotifications(req,res) {
        }else{
         res.status(400).json({
             error:true,
-            msg:"You have no notifications"
+            msg:"Opps, error has occured"
             })
        }
      })
 }
+
+
+function getAllNotifications(req,res) {
+    let id=req.user._id;
+
+    Notification.find({recipient:id}).populate('sender').sort({createdAt:-1}).exec(function (err,notifications) { 
+       if (notifications) {
+        res.status(200).json({
+            notifications
+        })
+       }else{
+        res.status(400).json({
+            error:err,
+            msg:"Opps, error has occured",
+            })
+       }
+      
+     })
+}
+
+
 
 
 

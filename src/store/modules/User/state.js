@@ -4,5 +4,7 @@ Vue.use(Vuex);
 
 export default {
       user:null,
+      role:localStorage.getItem('role') || null,
       profile:null,
+      currencies:[]
     }

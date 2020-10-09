@@ -220,7 +220,7 @@ function requestPasswordReset(req,res) {
             res.status(200).json({success: true}) 
         }else{
             res.status(400).json({
-                msg:"There is no user with such email"
+                msg:"User not found"
             })
         }
     })

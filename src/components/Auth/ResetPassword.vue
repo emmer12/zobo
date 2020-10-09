@@ -1,16 +1,16 @@
 <template>
   <div class="signup-con">
-    <div class="left">
+     <div class="left">
+      <h2>Sign Up</h2>
       <v-img
         alt="App Logo"
-        class="shrink mr-2"
+        class="shrink mr-2 img"
         contain
         src="./../../assets/images/logo.png"
         transition="scale-transition"
-        width="40"
+        width="100"
       />
       <br />
-      <h2>Challenge and be challenged by musical gurus</h2>
     </div>
     <div class="right">
      <v-container grid-list-md class="text-center">
@@ -132,19 +132,27 @@ export default {
 
 
 
-<style lang="scss" >
+<style lang="scss" scoped>
 .signup-con {
   display: grid;
   grid-template-columns: 40% 60%;
   height: 100%;
-  & .left {
-    background: linear-gradient(#7cbf7e, rgba(0, 0, 0, 0.5));
-    color: rgba(0, 100, 0, 0.7);
-    height: 100%;
-    width: 80%;
-    //  text-align:center;
-    padding-top: 100px;
-    padding-left: 20px;
+  &  .left {
+    background: linear-gradient(rgb(211, 74, 26), rgba(0, 0, 0, 0.5));
+    color: rgb(245, 245, 245, 0.9);
+    height: 400px;
+    width: 400px;
+    border-radius: 50%;
+    text-align: right;
+    padding-top: 140px;
+    padding-right: 100px;
+    transform: translateX(-200px);
+    position: relative;
+    & .img {
+      float: right;
+      position: absolute;
+      right: 90px;
+    }
   }
   & .right {
     padding: 10px;

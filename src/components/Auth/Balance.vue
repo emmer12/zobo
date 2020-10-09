@@ -5,11 +5,12 @@
           Your Balance
       </v-card-title>
         <v-card-text>
-           <h2 class="body-1"><v-icon>mdi-currency-usd</v-icon> {{user.balance}}</h2>
+           <h2 class="body-1" v-if="user.currency==='USD'"><v-icon>mdi-currency-usd</v-icon> {{user.balance.toFixed(2)}}</h2>
+           <h2 class="body-1" v-else>&#8358; {{user.balance.toFixed(2)}}</h2>
           <v-btn color="primary" text small class="float-right mt-n4" @click="openW">Withdraw</v-btn>
         </v-card-text>
     </v-card>
-      <withdraw-dialog :value="value" :balance="user.balance" :dialog="dialog" @closeDialog="dialog=!dialog;value='';"></withdraw-dialog>
+      <withdraw-dialog :balance="user.balance" :dialog="dialog" @closeDialog="dialog=!dialog;"></withdraw-dialog>
   </div>
 </template>
 

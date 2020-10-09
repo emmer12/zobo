@@ -21,7 +21,7 @@ var storage=multer.diskStorage({
 
 router.get('/user',middleware.authenticate,UserController.getUser)
 
-router.get('/:username',UserController.getByUsername)
+router.get('/z/:username',UserController.getByUsername)
 
 
 router.post('/update',middleware.authenticate,UserController.updateProfile)
@@ -32,8 +32,17 @@ router.post('/follow',middleware.authenticate,FollowController.follow)
 
 router.post('/unfollow',middleware.authenticate,FollowController.unFollow)
 
-router.get('/get-follow/:uid',middleware.authenticate,FollowController.getfollow)
 
+
+router.post('/send-email',middleware.authenticate,UserController.sendMail)
+
+router.get('/get-follow',middleware.authenticate,FollowController.getfollow)
+
+router.get('/get-profile-follow/:uid',FollowController.getProfollow)
+
+router.get('/get-currency',UserController.getCurrency)
+
+router.patch('/set-currency',middleware.authenticate,UserController.setCurrency)
 
 
 var upload=multer({storage:storage,limits:{fileSize:2000000}}).single('file');

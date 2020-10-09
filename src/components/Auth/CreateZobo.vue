@@ -7,9 +7,10 @@
               <input
               name="name"
               id="id"
-              placeholder="Zobo"
+              placeholder="_ _ _ _ _ _ _ _ _ _ _ _ _ _"
               v-model="newZobo.title"
               class="elevation-1 custom-input"
+             v-on:change='wait'
             />
             <span class="placeh">Buy me</span>
             </div>
@@ -31,21 +32,13 @@
               id="id"
               type="number"
               v-model="newZobo.min"
-              prepend-inner-icon="mdi-currency-usd"
+              :prepend-inner-icon="user.currency=='USD' ? 'mdi-currency-usd' : 'mdi-currency-ngn'"
               solo
             ></v-text-field>
 
               <v-btn v-if="!src.length" color="" class="my-5" @click="openUpload">Upload File</v-btn>
 
               <img v-else :src="src" width="100%" alt=""> 
-
-            <!-- <v-select
-              solo
-              :items="zoboCat"
-              v-model="newZobo.type"
-              label="Zobos"
-              :loading=loadingC
-            ></v-select> -->
 
 
             <br />
@@ -56,6 +49,9 @@
       </div>
 
       <upload-dialog :dialog='dialog' @closeDialog="dialog=!dialog;" @uploaded="setImage" ></upload-dialog>
+  
+  
+  
   </div>
 </template>
 
@@ -145,17 +141,45 @@ export default {
 
     getId(zobo){
       return this.getZobo.find(item=>zobo === item.zobo)._id
+    },
+    wait(val){
+      console.log(val);
+    
+    },
+
+
+    waitForIt(val) {
+      if (this.time) {
+        clearTimeout(this.time);
+      }
+      this.loading = true;
+      this.time = setTimeout(() => this.searchTerm(val), 1000);
+    },
+    searchTerm(val) {
+      if (!val.length) return;
+      this.$store.dispatch("searchTerm", val).then(data => {
+        this.users = data.users;
+        this.challenges = data.challenges;
+        this.loading = false;
+      });
     }
   },
 
   mounted() {
     this.getZoboCat()
   },
-
+  watch: {
+    title(val) {
+      this.waitForIt(val);
+    },
+  },
   computed: {
        getZobo(){
          return this.$store.getters.zoboCat
-       }
+       },
+      user(){
+        return this.$store.getters.user
+      }
   }
 };
 </script>
@@ -167,6 +191,7 @@ export default {
   margin-bottom:10px;
   width:100%;
   padding-left:100px;
+  outline: none;
 
   & :focus{
     border:none

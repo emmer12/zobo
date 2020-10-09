@@ -17,11 +17,11 @@ let notificationSchema = mongoose.Schema({
   },
   sender: [{
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'users'
   }],
   recipient: [{
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'users'
   }]
 },
   {

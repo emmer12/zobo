@@ -68,9 +68,12 @@ export default {
     submitPin(val) {
       this.loading = true;
       if (!val.length) return;
-      this.$store.dispatch("submitPin", {val}).then(()=>{}).catch(()=>{
-       this.loading = false;
+      this.$store.dispatch("submitPin", {val}).then(()=>{
+      this.pin=' '
+      }).catch(()=>{
+        this.loading = false;
        this.error="Wrong pin"
+       this.pin=" "
       })
   },
     focusInput(){

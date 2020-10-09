@@ -49,7 +49,7 @@ export default {
        rules: {
         required: v => !!v || "This field is required",
         upto: v =>v <= this.balance || "Insufficient fund",
-        min: v =>v == 2 || "You can only withdraw $2 and above",
+        min: v =>v >= 2 || "You can only withdraw $2 and above",
          },
       amount:{},
       loading:false,

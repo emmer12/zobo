@@ -1,6 +1,7 @@
 <template>
   <div class="pa-4">
     <div class="d-flex justify-center align-center" style v-if="zobo">
+     
       <v-layout row wrap>
         <v-flex md6 xs12>
           <div style="width:100%">
@@ -11,7 +12,7 @@
         </v-flex>
         <v-flex md6 xs12>
           <div class="pa-4">
-            <v-btn block color rounded>{{zobo.title}}</v-btn>
+            <v-btn block color text>{{zobo.title}}</v-btn>
             <p class="py-4">{{zobo.description}}</p>
             <v-btn color="grey" rounded outlined>
               Min : $
@@ -42,7 +43,7 @@
 
             <v-btn color="primary" rounded @click="dialog=true">
               Share your Link
-              <v-icon right>mdi-share</v-icon>
+              <v-icon right>mdi-share-variant</v-icon>
             </v-btn>
           </div>
         </v-flex>
@@ -51,7 +52,7 @@
     <v-divider></v-divider>
 
     <div class="yield-con">
-      <h2 class="title mt-5">Zobo Yields</h2>
+      <h2 class="title mt-5">Returns</h2>
       <v-divider></v-divider>
 
       <div v-if="!yielded.length" class="pa-10">
@@ -116,7 +117,7 @@
       </div>
     </div>
 
-    <share-dialog :dialog="dialog" @closeDialog="dialog=!dialog;value='';field=''"></share-dialog>
+    <share-dialog :dialog="dialog" :zobo="zobo" @closeDialog="dialog=!dialog;value='';field=''"  @copyLink="copyText"></share-dialog>
   </div>
 </template>
 

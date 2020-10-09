@@ -112,6 +112,42 @@
       </div>
 
 
+       <div class="edit-list">
+        <v-card class="pa-4">
+          <h4 class="text-block">BirthDay</h4>
+            <v-menu
+                ref="menu"
+                lazy
+                :close-on-content-click="false"
+                v-model="menu"
+                transition="scale-transition"
+                offset-y
+                :nudge-right="40"
+                min-width="290px"
+              >
+                <template v-slot:activator="{on}">
+                  <v-text-field
+                    label="Birthday date"
+                    v-model="newUser.birthday"
+                    prepend-icon="event"
+                    solo
+                    readonly
+                    v-on="on"
+                    :value="user.birthday"
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  ref="picker"
+                  v-model="newUser.birthday"
+                  @change="$refs.menu.save(newUser.birthday)"
+                  min="1950-01-01"
+                  :max="new Date().toISOString().substr(0, 10)"
+                ></v-date-picker>
+              </v-menu>
+        </v-card>
+      </div>
+
+
 
         
         <div class="edit-list">
@@ -155,7 +191,16 @@ export default {
        dialog:false,
        loading:false,
        updated:false,
+       menu: false,
+       newUser:'',
+       edited:false
     }
+  },
+  watch: {
+  user(){  
+      this.edited=true  
+     },
+     deep:true
   },
   methods: {
     openDialog(){
@@ -167,7 +212,8 @@ export default {
        this.dialog=true
      },
      updateField(field,e){
-       let data={}
+      if (this.edited) {
+         let data={}
        data.field=field;
        data.value=e.target.value
        this.loading=true
@@ -184,6 +230,7 @@ export default {
             });
          this.loading=false
        })
+      }
      },
 
      setImage(data){

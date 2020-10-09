@@ -68,6 +68,11 @@ let userSchema=mongoose.Schema({
     type:String,
     required:false
   },
+  currency:{
+    type:String,
+    required:false,
+    default:"USD"
+  },
   profile_image:{
     type:String,
     required:false,
@@ -132,10 +137,10 @@ userSchema.methods.tokenize=function tokenize(){
 
 userSchema.methods.pinAuthToken=function pinAuthToken(){
   const token=jwt.sign({
-   email:this.email,
+  email:this.email,
  },
  process.env.JWT_SECRET_TOKEN,
- {expiresIn:'1h'}
+ {expiresIn:'5m'}
  )
  return token
 }

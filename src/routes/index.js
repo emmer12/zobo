@@ -5,11 +5,13 @@ import Contact from '../components/pages/Contact.vue';
 import SignUp from '../components/Auth/SignUp';
 import SignIn from '../components/Auth/SignIn';
 import Dashboard from '../components/Auth/Dashboard';
+import Admin from '../components/Auth/Admin';
 import ZoboDetails from '../components/Auth/ZoboDetails';
 import CreateZobo from '../components/Auth/CreateZobo';
 import ZoboList from '../components/Auth/ZoboListView';
 import ForgetPassword from '../components/Auth/ForgetPassword';
 import ResetPassword from '../components/Auth/ResetPassword';
+import Notifications from '../components/Auth/NotificationsPage';
 import Settings from '../components/Auth/Settings';
 import Profile from '../components/Auth/Profile';
 import Transactions from '../components/Auth/Transactions';
@@ -19,6 +21,7 @@ import Access from '../components/Auth/Access';
 import Logout from '../components/Auth/Logout';
 import Page404 from '../components/pages/Page404';
 import MyZoboPage from '../components/pages/MyZoboPage';
+import EmailTest from '../components/pages/EmailTest';
 import StoreCat from '../components/pages/StoreCat';
 import Payment from '../components/Auth/Payment';
                                                                                                                
@@ -28,7 +31,11 @@ export const routes = [
         name: 'home',
         component: HomePage
     },
-
+    { 
+        path: '/email/test',
+        name: 'email.test',
+        component: EmailTest
+    },
     {
         path:'/access',
         name:'access',
@@ -89,6 +96,14 @@ export const routes = [
         }
     },   
     {
+        path: '/admin',
+        name: 'admin',
+        component: Admin,
+        meta: {
+            requiresSuperAuth:true
+        },
+    },
+    {
         path: '/dashboard',
         name: 'dashboard',
         component: Dashboard,
@@ -137,10 +152,21 @@ export const routes = [
                         requiresAuth: true,                              
                     }
                 },
+                {
+                    path: 'me/notifications',
+                    name: 'all.notification',
+                    component:Notifications,
+                    meta: {
+                        requiresAuth: true,                              
+                    }
+                },
                  {
                             path:'me/settings',
                             name:'settings',
-                            component:Settings
+                            component:Settings,
+                            meta: {
+                                requiresAuth: true,                              
+                            }
 
                 }
         ]

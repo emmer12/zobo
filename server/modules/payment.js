@@ -22,9 +22,17 @@ let paymentSchema=mongoose.Schema({
   status:{
     type:String,
     required:true,
-    default:"Pending"
+  },
+  msg:{
+    type:String,
+    required:false,
+
   },
   transaction_id:{
+    type:String,
+    required:true,
+  },
+  reference:{
     type:String,
     required:true,
   },

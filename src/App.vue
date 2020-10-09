@@ -18,8 +18,10 @@
 </template>
 
 <script>
+import VueJwtDecode from 'vue-jwt-decode'
 import NavBar from "./components/Partials/NavBar";
 import Cheers from "./components/Partials/Cheers";
+
 export default {
   name: "App",
   components: {
@@ -28,18 +30,26 @@ export default {
   },
   data() {
     return {
-      show:true
+      show:true,
+      exp:null
     }
   },
-
+  created(){
+    },
  watch: {
    $route(){
      window.scrollTo(0,0)
-   }
+       if (localStorage.getItem('pinToken') && Date.now()>=VueJwtDecode.decode(localStorage.getItem('pinToken')).exp * 1000) {
+         this.$store.dispatch('destroyPinToken');
+            }
+      }
  },
   
   mounted() {
-    this.$store.dispatch("getUser");
+   if (localStorage.getItem('token')) {
+      this.$store.dispatch("getUser");
+      this.$store.dispatch("getCurrency");
+   }
   },
   computed: {
   },

@@ -1,9 +1,25 @@
 <template>
-  <div class="pa-4 zobo-con">
+  <div class="zobo-con">
 
     <v-alert v-show="errors" type="error" :value="true">
       {{errors}}
     </v-alert>
+
+    <v-layout v-if="zobo" class="pa-5" style="background:#fff;">
+      
+    <v-avatar
+      size="150"
+      color="white"
+    >
+      <img :src="zobo.user_id[0].profile_image" alt="Cellepay">
+    </v-avatar>
+    <div class="pa-4">
+        <h4 class="title">{{ zobo.user_id[0].firstname  }} {{zobo.user_id[0].lastname}}</h4>
+        <router-link to="#" class="body-2 primary--text">@{{ zobo.user_id[0].username}}</router-link>
+    </div>
+    </v-layout>
+
+
 
     <div class="d-flex justify-center align-center" v-if="!loading && zobo" style>
       <v-layout row wrap>
@@ -16,11 +32,10 @@
         </v-flex>
         <v-flex md6 xs12>
           <div class="pa-4">
-            <v-btn block color rounded>{{zobo.title}}</v-btn>
-            <p class="py-4" v-if="zobo.description.length<100">{{zobo.description}}</p>
-            <p class="py-4" v-else>{{zobo.description.substr(0,100)+'...'}}</p>
+            <v-btn block color  style="cursor:none" rounded>{{zobo.title}}</v-btn>
+            <p class="py-4">{{zobo.description}}</p>
           </div>
-          <div class="zobo">
+          <div class="zobo pa-4">
             <div style="width:100px" class="elevation-1" color>
               <v-icon left color="#d34a1a">mdi-hand-heart</v-icon>
               <span class="grey--text">$ {{zobo.min}}</span>
@@ -118,7 +133,6 @@ export default {
   max-width: 800px;
   left: 50%;
   transform: translateX(-50%);
-  height: 100px;
 }
 
 .zobo {
@@ -130,7 +144,7 @@ export default {
   & div {
     padding: 10px;
     border-radius: 3px;
-    margin-right: 5px;
+    // margin-right: 5px;
     align-self: center;
 
     &.rounded {
