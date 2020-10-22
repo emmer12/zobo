@@ -93,10 +93,11 @@ function createSlug(text) {
 
 
 async function create(req, res) {
-    let title = "Buy me " + req.body.title;
+    let title = req.body.title;
     let description = req.body.description;
     let type = req.body.type;
     let cover = req.body.cover;
+    let celep = req.body.celep;
     let user_id = req.user._id;
     let min = req.body.min;
     let currency = req.user.currency;
@@ -114,6 +115,7 @@ async function create(req, res) {
     } else {
         var newPost = new Zobo({
             title,
+            celep,
             slug,
             description,
             type,
@@ -123,7 +125,7 @@ async function create(req, res) {
             currency
         })
 
-        newPost.link = `${process.env.SRVER_HOST}/zobo/${newPost._id}/${slug}`
+        newPost.link = `${process.env.SERVER_HOST}/zobo/${newPost._id}/${slug}`
         newPost.save().then(() => {
             follower && notifyUsers(follower.follower_id, 'z-created', user_id)
             res.status(200).json({
@@ -171,18 +173,22 @@ function userZobos(req, res, next) {
 
 
 function unlinkfile(id) {
-
     return new Promise((resolve) => {
         Zobo.findOne({ _id: id }).exec(function (err, zobo) {
             if (zobo) {
                 if (zobo.cover) {
                     let coverArray = zobo.cover.split('/')
                     let filename = coverArray[coverArray.length - 1];
-                    fs.unlink(`./public/images/${filename}`, function (err) {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
+                    if (['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg','6.jpg','7.jpg','8.jpg','9.jpg'].includes(filename)) {
+                      resolve(true)   
+                    }else{
+                        
+                        fs.unlink(`./public/images/${filename}`, function (err) {
+                            if (err) {
+                                console.log(err);
+                            }
+                        })
+                    }
                 }
                 resolve(true)
             }

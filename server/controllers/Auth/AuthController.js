@@ -6,7 +6,7 @@ const Mailer = require('./../../config/mailer')
 const AuthController = {
     create,
     login,
-    confirmUser,
+    confirmUserEmail,
     requestPasswordReset,  
     passwordReset,
     confirmPasswordReset,
@@ -22,10 +22,10 @@ function validateData(field){
                 check('username').not().isEmpty().withMessage('email must not be empty'),
                 check('firstname').not().isEmpty().withMessage('firstname is required'),
                 check('lastname').not().isEmpty().withMessage('lastname is required'),
-                check('location').not().isEmpty().withMessage('location is required'),
+                // check('location').notmnisEmpty().withMessage('location is required'),
                 check('email').not().isEmpty().withMessage('email is required'),
                 check('email').isEmail().withMessage('inverlid email address'),
-                check('birthday').not().isEmpty().withMessage('date must not be empty'),
+                // check('birthday').not().isEmpty().withMessage('date must not be empty'),
                 check('pin').not().isEmpty().withMessage('pin is required'),
                 check('password').not().isEmpty().withMessage('password is required'),
                 check('password').isLength({min:6}).withMessage('password must not be less than 6 value')
@@ -132,10 +132,10 @@ function create(req, res, next) {
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const email = req.body.email;
-    const birthday = req.body.birthday;
+    // const birthday = req.body.birthday;
     const password = req.body.password;
     const pin = req.body.pin;
-    const location = req.body.location;
+    // const location = req.body.location;
 
 
     let errors = validationResult(req);
@@ -172,8 +172,6 @@ function create(req, res, next) {
                     email,
                     password,
                     pin,
-                    birthday,
-                    location,
 
                 })
 
@@ -201,7 +199,7 @@ function create(req, res, next) {
     }
 }
 
-function confirmUser(req, res) {
+function confirmUserEmail(req, res) {
     User.findOneAndUpdate(
         { confirmationToken: req.params.token },
         { confirmationToken: "",confirmed:true },

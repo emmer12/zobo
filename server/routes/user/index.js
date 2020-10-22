@@ -36,6 +36,8 @@ router.post('/unfollow',middleware.authenticate,FollowController.unFollow)
 
 router.post('/send-email',middleware.authenticate,UserController.sendMail)
 
+router.post('/add-special',middleware.authenticate,UserController.addSpecial)
+
 router.get('/get-follow',middleware.authenticate,FollowController.getfollow)
 
 router.get('/get-profile-follow/:uid',FollowController.getProfollow)

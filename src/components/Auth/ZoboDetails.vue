@@ -12,7 +12,9 @@
         </v-flex>
         <v-flex md6 xs12>
           <div class="pa-4">
-            <v-btn block color text>{{zobo.title}}</v-btn>
+            <v-btn block color text> 
+              {{zobo.celep}} On my {{zobo.title }}
+            </v-btn>
             <p class="py-4">{{zobo.description}}</p>
             <v-btn color="grey" rounded outlined>
               Min : $

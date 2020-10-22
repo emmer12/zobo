@@ -55,9 +55,12 @@ app.use('/api/user',apiUser);
 app.use('/api/notification',apiNotifications);
 // app.use('/api/admin',apiAdmin);
 
+if (process.env.NODE_ENV==='production') {
+  app.use(express.static(__dirname+'/public'))
+}
 
-app.get('/',function(req,res,next) {
-  res.send('you are welcome')
+app.get(/.*/,function(req,res,next) {
+  res.sendFile(__dirname+'/public/index.html')
 })
 
 // catch 404 and forward to error handler

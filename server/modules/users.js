@@ -15,7 +15,7 @@ let userSchema=mongoose.Schema({
   },
   birthday:{
     type:Date,
-    required:true
+    required:false
   },
   username:{
     type:String,
@@ -64,6 +64,10 @@ let userSchema=mongoose.Schema({
     required:false,
     default:0
   },
+  city:{
+    type:String,
+    required:false
+  },
   bio:{
     type:String,
     required:false
@@ -82,6 +86,10 @@ let userSchema=mongoose.Schema({
     type:Schema.Types.ObjectId,
     ref:'users'
   }],
+  special:{
+    type:Array,
+    required:false
+  },
 },
 {
   timestamps:true

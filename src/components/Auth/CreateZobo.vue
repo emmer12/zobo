@@ -3,17 +3,45 @@
       <div class="d-flex justify-center align-center" style="">
         <div class="create-zobo">
             <v-form ref="form">
-            <div style="position:relative">
+
+
+          <v-select
+            :items="['Buy me','Celebrate me']"
+            v-model="newZobo.celep"
+            label="What are you up to?"
+            solo
+            hint=""
+          ></v-select>
+
+            <div style="position:relative" v-if="newZobo.celep=='Buy me'">
               <input
               name="name"
               id="id"
-              placeholder="_ _ _ _ _ _ _ _ _ _ _ _ _ _"
+              placeholder="What do you want people to buy for you?"
               v-model="newZobo.title"
               class="elevation-1 custom-input"
              v-on:change='wait'
             />
             <span class="placeh">Buy me</span>
             </div>
+
+
+            <v-select
+              v-if="newZobo.celep=='Celebrate me'"
+              :items="['Birthday','Wedding','Graduation']"
+              v-model="newZobo.title"
+              label="What are you celebrating"
+              hint="Tell us what you are celebrating"
+              v-on:change="(val)=>handleChange(val)"
+              solo
+            ></v-select>
+
+
+            <div class="auto-complete"  v-if="newZobo.celep=='Celebrate me'">
+               <v-btn color="" v-for="(custom, index) in fCustomText" :key="index" outlined rounded small @click="setVal(custom.msg)"> {{custom.msg}} </v-btn>              
+            </div>
+
+
             <v-textarea
               row="2"
               label="Description"
@@ -26,6 +54,8 @@
               :rules="[rules.required,rules.length]"
               maxlength="100"
             ></v-textarea>
+
+          
             <v-text-field
               name="name"
               label="Minimum"
@@ -38,7 +68,10 @@
 
               <v-btn v-if="!src.length" color="" class="my-5" @click="openUpload">Upload File</v-btn>
 
-              <img v-else :src="src" width="100%" alt=""> 
+              <div v-else class="preview">
+                <v-icon @click="closePreview">mdi-window-close</v-icon>
+                <img :src="src" width="100%" alt=""> 
+              </div>
 
 
             <br />
@@ -71,10 +104,42 @@ export default {
               size: v =>
              !v || v.size < 2000000 || "Image must not be greater than 2 MB",            
           },
-          newZobo:{},
+          newZobo:{
+            description:'',
+            title:''
+          },
           loadingC:true,
           loading:false,
           zoboCat:[],
+          fv:'',
+          customText:[{
+            id:1,
+            msg:'This is he first custum wedding',
+            category:'Wedding'
+          },
+          {
+            id:2,
+            msg:'This is he first custum weding',
+            category:'Wedding'
+          },
+          {
+            id:3,
+            msg:'This is he first happy birthday',
+            category:'Birthday'
+          },
+          {
+            id:4,
+            msg:'This is he first custum message',
+            category:'Wedding'
+          },
+          {
+            id:5,
+            msg:'Happy graduation o me Graduation',
+            category:'Graduation'
+          },
+          
+          
+          ],
           dialog:false,
           src:""
 
@@ -95,11 +160,17 @@ export default {
       this.newZobo.cover=data.url;
       this.src=data.url;
     },
+    closePreview(){
+      this.src='';
+    },
 
     openUpload(){
       this.dialog=true
     },
 
+    setVal(text){
+      this.newZobo.description=text
+    },
     createZobo(){
       if (this.$refs.form.validate()) {
         this.loading = true;
@@ -138,13 +209,15 @@ export default {
         });
       }
     },
+    handleChange(val){
+        this.fv=val
+    },
 
     getId(zobo){
       return this.getZobo.find(item=>zobo === item.zobo)._id
     },
     wait(val){
       console.log(val);
-    
     },
 
 
@@ -179,13 +252,17 @@ export default {
        },
       user(){
         return this.$store.getters.user
+      },
+      fCustomText(){
+        return this.customText.filter(custom=>custom.category===this.fv)
       }
   }
 };
 </script>
 
-<style lang="scss">
-.custom-input{
+<style lang="scss" >
+
+.custom-input{ 
   padding:10px;
   border-radius:3px;
   margin-bottom:10px;
@@ -206,8 +283,49 @@ export default {
 }
 .create-zobo{
    margin-top:50px;
-   width: 400px;
+   max-width:600px;
+   width:600px;
+   .auto-complete{
+     padding:10px;
+     margin:10px 0px;
+     opacity: .7;
+     display: flex;
+     flex-direction: row;
+     overflow: auto;
+     &::-webkit-scrollbar{
+        background:#eef4ff;
+        width:5px;
+        height:3px
+      }
+
+    &::-webkit-scrollbar-thumb{
+     background: #fad4d5;
+      border-radius:2.5px
+
+    }
+      
+     button{
+       margin-left: 5px;
+        text-transform:none !important;
+     }
+
+   }
+
+  
 }
+
+ .preview{
+     position: relative;
+    padding: 10px;
+    .v-icon{
+    position: absolute;
+    right: 25px;
+    top: 25px;
+    color: #ffffff;
+    cursor: pointer;
+    text-shadow: 0px 2px 2px #444;
+    }
+   }
 @media (max-width: 767px) {
 .create-zobo{
    margin-top:50px;

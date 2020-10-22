@@ -1,20 +1,8 @@
 <template>
   <div class="signup-con">
-    <div class="left">
-      <h2>Sign Up</h2>
-      <v-img
-        alt="App Logo"
-        class="shrink mr-2 img"
-        contain
-        src="./../../assets/images/logo.png"
-        transition="scale-transition"
-        width="100"
-      />
-      <br />
-    </div>
     <div class="right">
       <v-container grid-list-md>
-        <div class="d-flex d-sm-none bottom-z">
+        <!-- <div class="d-flex d-sm-none bottom-z">
           <v-img
             alt="App Logo"
             class="shrink mr-2 img"
@@ -24,9 +12,13 @@
             width="100"
           />
           <h2>Sign Up,</h2>
-        </div>
+        </div> -->
         <v-flex>
-          <v-card class="pa-5">
+          <div class="pa-5">
+            <div>
+              <h1>Get started with Cellpay</h1>
+              <p>Join now and start recieving gifts <router-link tag="a" class="primary--text" :to="{name:'access.signin'}">Already has an account <v-icon>mdi-help-circle</v-icon> </router-link></p>
+            </div>
             <v-spacer class="ma-5"></v-spacer>
             <v-form ref="form">
               <v-alert
@@ -41,14 +33,27 @@
               <v-alert type="info" :value="!!vmsg">{{vmsg}}</v-alert>
 
               <!-- <v-divider inset color="primary">Or</v-divider> -->
-              <v-text-field name="firstname" label="Firstname" v-model="newUser.firstname"></v-text-field>
+             <v-row class="mx-1">
+                <v-text-field 
+              name="firstname" 
+              label="Firstname" 
+              v-model="newUser.firstname"
+               :rules="[rules.required]"
+              solo
+              class="mr-2"
+            
+              >
+              <v-spacer></v-spacer>
+              </v-text-field>
 
               <v-text-field
                 name="lastname"
                 label="Lastname"
                 v-model="newUser.lastname"
                 :rules="[rules.required]"
+                solo
               ></v-text-field>
+             </v-row>
 
               <v-text-field
                 name="username"
@@ -56,23 +61,25 @@
                 v-model="newUser.username"
                 id="username"
                 :rules="[rules.required]"
+                solo
               ></v-text-field>
 
               <v-text-field
                 v-model="newUser.email"
                 label="E-mail"
                 :rules="[rules.required,rules.email]"
+                solo
               ></v-text-field>
 
-              <v-select
+              <!-- <v-select
                 v-model="newUser.location"
                 :items="['Lagos','Ondo','Abuja']"
                 :rules="[v => !!v || 'Item is required']"
                 label="Location"
                 required
-              ></v-select>
+              ></v-select> -->
 
-              <v-menu
+              <!-- <v-menu
                 ref="menu"
                 lazy
                 :close-on-content-click="false"
@@ -86,9 +93,10 @@
                   <v-text-field
                     label="Birthday date"
                     v-model="newUser.birthday"
-                    prepend-icon="event"
+                    prepend-inner-icon="event"
                     readonly
                     v-on="on"
+                    solo
                   ></v-text-field>
                 </template>
                 <v-date-picker
@@ -98,7 +106,7 @@
                   min="1950-01-01"
                   :max="new Date().toISOString().substr(0, 10)"
                 ></v-date-picker>
-              </v-menu>
+              </v-menu> -->
 
               <v-text-field
                 v-model="newUser.password"
@@ -111,6 +119,7 @@
                 :rules="[rules.required,rules.length]"
                 :type="value ? 'password' : 'text'"
                 @click:append="() => (value = !value)"
+                solo
               ></v-text-field>
 
               <v-text-field
@@ -123,6 +132,7 @@
                 :rules="[rules.required,rules.pinLength]"
                 type="number"
                 @click:append="() => (pin = !pin)"
+                solo
               ></v-text-field>
 
               <!-- <v-select
@@ -146,24 +156,31 @@
                 color="primary"
                 class="mr-4"
                 @click="register"
-              >Sign Up</v-btn>
+              >Create account</v-btn>
               <br/><br/>
-              <router-link tag="span" :to="{name:'access.signin'}">Already has an account ?</router-link>
+              
 
-              <v-btn class="mt-4" block color="blue" dark><v-icon left>mdi-facebook</v-icon> Login with facebook</v-btn>
+              <!-- <v-btn class="mt-4" block color="blue" dark><v-icon left>mdi-facebook</v-icon> Login with facebook</v-btn> -->
 
             </v-form>
-          </v-card>
+          </div>
         </v-flex>
 
       </v-container>
+    </div>
+    <div class="left">
+      <si-svg></si-svg>
     </div>
   </div>
 </template>
 
 <script>
 // import { mapActions } from 'vuex'
+import SiSvg from './../svg/signup'
 export default {
+  components: {
+    SiSvg
+  },
   data() {
     return {
       value: true,
@@ -245,29 +262,15 @@ export default {
 <style lang="scss" scoped>
 .signup-con {
   display: grid;
-  grid-template-columns: 20% 60%;
+  grid-template-columns: 50% 50%;
   height: 100%;
   & .left {
-    background: linear-gradient(rgb(211, 74, 26), rgba(0, 0, 0, 0.5));
-    color: rgb(245, 245, 245, 0.9);
-    height: 400px;
-    width: 400px;
-    border-radius: 50%;
-    text-align: right;
-    padding-top: 140px;
-    padding-right: 100px;
-    transform: translateX(-200px);
-    position: relative;
-    & .img {
-      float: right;
-      position: absolute;
-      right: 90px;
-    }
+
   }
   & .right {
     padding: 10px;
-    margin: auto;
-    width: 70%;
+    // margin: auto;
+    // width: 70%;
     // margin-top: 20px;
   }
 }

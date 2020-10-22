@@ -39,6 +39,19 @@ export default {
     },
 
 
+    confirmEmail({store},data) {
+        return new Promise((resolve, reject) => {
+            
+            Api.confirmEmail(data).then(res => {
+                console.log(store);
+                resolve(res)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    },
+
+
     loginUser({commit,rootState}, data) {
         return new Promise((resolve, reject) => {
             Api.login(data).then(res => {

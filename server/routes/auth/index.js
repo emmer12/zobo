@@ -22,7 +22,7 @@ router.post('/login',AuthController.validateData('login'),AuthController.login)
 router.post('/check-pin',middleware.authenticate,AuthController.checkPin)
 
 
-
+router.get('/email-confirmation/:token',AuthController.confirmUserEmail);
 
 // router.get('/pasword-reset-verify/:token',AuthController.confirmPasswordReset);
 

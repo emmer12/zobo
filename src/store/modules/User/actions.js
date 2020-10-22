@@ -152,6 +152,18 @@ export default {
               console.log('====================================');
             })
         })
+        
+    },
+
+    addSpecial({rootState },data) {
+        return new Promise((resolve, reject) => {
+            Api.addSpecial(rootState,data).then(res => {
+               resolve(res)
+            }).catch(err => {
+                reject(err)
+
+            })
+        })
     },
 
 }

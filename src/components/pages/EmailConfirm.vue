@@ -5,17 +5,14 @@
         <v-progress-circular v-if="loading" indeterminate color="primary"></v-progress-circular>
         <div v-if="success">
           <v-icon color="green" size="70">check</v-icon>
-          <h1 class="font-weight-black">Welcome To tunner</h1>
+          <h1 class="font-weight-black">Welcome To Cellepay! Few steps to get you set</h1>
           <p>Your email has been confirmed successfully</p>
-          <v-btn color="success" :to="{name:'profile'}">Go To Your Profile</v-btn>
+          <p> You will be redirected in few seconds to get you started</p>
         </div>
-
          <div v-if="error">
           <v-icon color="red" size="70">mdi-cancel</v-icon>
           <h1 class="font-weight-black red--text">Opps! Invalid token</h1>
         </div>
-
-
       </v-card>
     </v-container>
   </div>
@@ -35,8 +32,10 @@ export default {
     this.$store
       .dispatch("confirmEmail", this.$route.params.token)
       .then(() => {
-          this.loading=false,
-          this.success=true
+          this.loading=false;
+          this.success=true;
+
+          this.$router.push({name:'access.special'})
       })
       .catch(() => {
           this.loading=false

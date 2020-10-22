@@ -14,7 +14,7 @@
           <v-card class="ma-2 pa-2 zobo-cart" :to="{name:'list.details',params:{id:zobo._id}}">
             <span class="title" v-if="zobo.title.length < 5">{{zobo.title}}</span>
             <span v-else class="title">{{zobo.title.substr(0,5) + '...'}}</span>
-            <img :src="zobo.cover" width="100%" />
+            <img :src="zobo.cover" width="100%" style="max-height:250px"/>
             <!-- &#8358; -->
             <v-card-actions class="card-foot d-flex justify-space-between pa-3 align-center" style="background:rgba(245,245,245,0.5)">
               <span style="color:#d34a1a">$ {{zobo.balance}}.00</span>

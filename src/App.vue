@@ -12,7 +12,9 @@
         <router-view></router-view>
       </transition>
 
+      <footer-nav></footer-nav>
     </v-content>
+    <pin-view></pin-view>
     <cheers :cheers="'yesss'"></cheers>
   </v-app>
 </template>
@@ -21,12 +23,16 @@
 import VueJwtDecode from 'vue-jwt-decode'
 import NavBar from "./components/Partials/NavBar";
 import Cheers from "./components/Partials/Cheers";
+import PinView from "./components/Auth/PinView";
+import FooterNav from "./components/Partials/Footer";
 
 export default {
   name: "App",
   components: {
     NavBar,
-    Cheers
+    Cheers,
+    FooterNav,
+    PinView
   },
   data() {
     return {
@@ -59,4 +65,8 @@ export default {
 <style src="cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css"></style>
 <style lang="scss">
 @import url("./assets/css/animate.css");
+
+a{
+  text-decoration:none
+}
 </style>

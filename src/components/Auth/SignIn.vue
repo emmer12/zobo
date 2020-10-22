@@ -1,33 +1,14 @@
 <template>
   <div class="signup-con">
-    <div class="left">
-      <h2>Sign In</h2>
-      <v-img
-        alt="App Logo"
-        class="shrink mr-2 img"
-        contain
-        src="./../../assets/images/logo.png"
-        transition="scale-transition"
-        width="100"
-      />
-      <br />
-    </div>
+  
     <div class="right">
       <v-container grid-list-md>
-         <div class="d-flex d-sm-none bottom-z"> 
-          <v-img
-            alt="App Logo"
-            class="shrink mr-2 img"
-            contain
-            src="./../../assets/images/logo.png"
-            transition="scale-transition"
-            width="100"
-          />
-           <h2>Sign In</h2>
-        </div>
-            <!-- style="text-align:center" -->
         <v-flex>
-          <v-card class="pa-5">
+          <div class="pa-5">
+             <div>
+              <h1>Welcome back!</h1>
+              <p>We missed you <router-link tag="a" class="primary--text" :to="{name:'access.signup'}">Don't have account yet<v-icon>mdi-help-circle</v-icon> </router-link></p>
+            </div>
             <v-spacer class="ma-5"></v-spacer>
             <v-form ref="form">
               <v-alert
@@ -80,26 +61,33 @@
               >Sign In</v-btn>
               <br />
               <br />
-              <router-link tag="span" :to="{name:'access.signup'}">Don't have an account?</router-link>
               
               
               <br/>
 
-              <v-btn class="mt-4" block color="blue" dark><v-icon left>mdi-facebook</v-icon> Login with facebook</v-btn>
+              <!-- <v-btn class="mt-4" block color="blue" dark><v-icon left>mdi-facebook</v-icon> Login with facebook</v-btn> -->
 
             </v-form>
-          </v-card>
+          </div>
         </v-flex>
 
 
       </v-container>
+    </div>
+      <div class="left">
+       <sn-svg></sn-svg>
     </div>
      
   </div>
 </template>
 
 <script>
+import SnSvg from './../svg/signin'
+
 export default {
+  components: {
+    SnSvg
+  },  
   data() {
     return {
       value: true,
@@ -171,30 +159,13 @@ export default {
 
 .signup-con {
   display: grid;
-  grid-template-columns: 20% 60%;
+  grid-template-columns: 50% 50%;
   height: 100%;
   & .left {
-    background: linear-gradient(rgb(211, 74, 26), rgba(0, 0, 0, 0.5));
-    color: rgb(245, 245,245,0.9);
-    height: 400px;
-    width: 400px;
-    border-radius:50%;
-     text-align:right;
-    padding-top: 140px;
-    padding-right: 100px;
-    transform:translateX(-200px);
-    position: relative;
-    & .img{
-      float:right;
-      position: absolute;
-      right:90px;
-
-    }
   }
   & .right {
     padding: 10px;
-    margin: auto;
-    width: 70%;
+    width: 100%;
     margin-top: 20px;
   }
 }

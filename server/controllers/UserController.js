@@ -1,6 +1,7 @@
 // const jwt = require('jsonwebtoken');
 const User = require("./../modules/users")
 const Zobo = require("./../modules/zobo")
+const Special = require("./../modules/special")
 const Currency = require("./../modules/currency")
 const { currencyConverter } = require("./../utility")
 const Mailer = require('../config/mailer')
@@ -16,6 +17,7 @@ const UserController = {
     getCurrency,
     setCurrency,
     sendMail,
+    addSpecial
     // requestPasswordReset,  
     // passwordReset,
     // confirmPasswordReset
@@ -110,8 +112,30 @@ function getUser(req, res) {
     })
 }
 
+function addSpecial(req,res){
+    let name=req.body.name
+    let date=req.body.date
+    let user_id=req.user._id
 
+    let newSpecial=new Special({
+        name,
+        date,
+        user_id
+    })
 
+    newSpecial.save().then((data, err) => {
+        User.findOneAndUpdate({ _id: user_id },{ $push:{special:data}} , { new: true }).then(()=>{
+            res.status(200).json({
+                success: true,
+            })
+        }).catch(err=>console.log(err));
+       
+    }).catch(()=>{
+        res.status(400).json({
+            success:false,
+        })
+    })
+}
 
 function updateProfile(req, res) {
     let field = req.body.field;

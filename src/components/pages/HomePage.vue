@@ -20,10 +20,37 @@ export default {
   components: {
     Banner,
   },
+  methods:{
+            getCurrentLocation(){
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(this.setCurrentPosition);
+                }else{
+                    alert('geoLocation not supported');
+                }
+            },
+            setCurrentPosition(position){
+              fetch('http://ipinfo.io',{
+                method:"GET"
+              },'jsonp').then(response => {
+                console.log(response);
+                // 0e4971de7ab8ce
+              })
+                .then(data => {
+                  console.log('Success:', data);
+                })
+                // let pos={lat:position.coords.latitude,long:position.coords.longitude}
+                console.log('====================================');
+                console.log(position);
+                console.log('====================================');
+                // this.$store.dispatch('setCurrentPostion',pos)
+
+            }
+  },
   data: () => ({
     next:false
   }),
   created () {
+    this.getCurrentLocation()
   },
 
   computed: {

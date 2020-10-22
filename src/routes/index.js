@@ -4,6 +4,7 @@ import About from '../components/pages/About.vue';
 import Contact from '../components/pages/Contact.vue';
 import SignUp from '../components/Auth/SignUp';
 import SignIn from '../components/Auth/SignIn';
+import Special from '../components/Auth/Special';
 import Dashboard from '../components/Auth/Dashboard';
 import Admin from '../components/Auth/Admin';
 import ZoboDetails from '../components/Auth/ZoboDetails';
@@ -23,6 +24,7 @@ import Page404 from '../components/pages/Page404';
 import MyZoboPage from '../components/pages/MyZoboPage';
 import EmailTest from '../components/pages/EmailTest';
 import StoreCat from '../components/pages/StoreCat';
+import EmailConfirm from '../components/pages/EmailConfirm';
 import Payment from '../components/Auth/Payment';
                                                                                                                
 export const routes = [
@@ -64,6 +66,12 @@ export const routes = [
                     meta: {
                         requiresVisitor: true,                              
                     }
+                },
+
+                {
+                    path: 'special',
+                    name: 'access.special',
+                    component:Special,
                 }
         ]
     },
@@ -183,6 +191,11 @@ export const routes = [
         
     },
     
+    { 
+        path: '/users/confirmation/:token',
+        name:'user.e.confirm',
+        component: EmailConfirm,
+    },
     {
         path: '/logout',
         name: 'logout',

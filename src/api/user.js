@@ -55,6 +55,10 @@ const sendEmail=(rootState)=>{
     api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
     return api.post(endPoint+'/send-email')
 }
+const addSpecial=(rootState,data)=>{
+    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+    return api.post(endPoint+'/add-special',data)
+}
 
 
 export default{
@@ -67,5 +71,6 @@ export default{
    unfollow,
    getCurrency,
    setCurrency,
-   sendEmail
+   sendEmail,
+   addSpecial
 }

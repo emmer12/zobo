@@ -2,28 +2,11 @@
   <div class="signup-con ">
     <div class="access"></div>
      <div class="left">
-      <h2>Forgot Password</h2>
-      <v-img
-        alt="App Logo"
-        class="shrink mr-2 img"
-        contain
-        src="./../../assets/images/logo.png"
-        transition="scale-transition"
-        width="100"
-      />
-      <br />
+         <forgot-svg></forgot-svg>
     </div>
     <div class="right" >
        <div class="d-flex d-sm-none bottom-z">
-          <v-img
-            alt="App Logo"
-            class="shrink mr-2 img"
-            contain
-            src="./../../assets/images/logo.png"
-            transition="scale-transition"
-            width="100"
-          />
-          <h2>Forgot Reset</h2>
+           
         </div>
 
         <v-container grid-list-md v-if="success">
@@ -33,7 +16,7 @@
       </v-container>
       <v-container grid-list-md v-if="!success">
         <v-flex>
-          <v-card class="pa-5">
+          <div class="pa-5">
             <span class="title">Reset Password Resquest</span>
             <v-spacer class="ma-5"></v-spacer>
             <v-form ref="form">
@@ -64,7 +47,7 @@
 
           
             </v-form>
-          </v-card>
+          </div>
         </v-flex>
       </v-container>
     </div>
@@ -72,7 +55,12 @@
 </template>
 
 <script>
+import ForgotSvg from './../svg/forgot'
+
 export default {
+  components: {
+    ForgotSvg
+  },
   data() {
     return {
       valid: true,
@@ -126,29 +114,15 @@ export default {
 <style lang="scss" scoped>
 .signup-con {
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 50% 50%;
   height: 100%;
   & .left {
-    background: linear-gradient(rgb(211, 74, 26), rgba(0, 0, 0, 0.5));
-    color: rgb(245, 245, 245, 0.9);
-    height: 400px;
-    width: 400px;
-    border-radius: 50%;
-    text-align: right;
-    padding-top: 140px;
-    padding-right: 100px;
-    transform: translateX(-200px);
-    position: relative;
-    & .img {
-      float: right;
-      position: absolute;
-      right: 90px;
-    }
+  
   }
   & .right {
     padding: 10px;
-    margin:auto;
-    width: 70%;
+
+    width: 100%;
     // margin-top: 20px;
   }
 }
