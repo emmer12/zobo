@@ -7,14 +7,14 @@
         leave-active-class="animated zoomOut"
       >
       
-        <v-flex v-for="(zobo, index) in zobos" :key="index" md6 sm4 xs6>
+        <v-flex v-for="(zobo, index) in zobos" :key="index" md4 sm4 xs6>
             <v-btn @click="shareLink(zobo)" style="float:right;z-index:999" fab small color="error" class="elevation-1">
               <v-icon>mdi-share-variant</v-icon>
             </v-btn>
-          <v-card class="ma-2 pa-2 zobo-cart" :to="{name:'list.details',params:{id:zobo._id}}">
+          <v-card class="ma-2 pa-2 zobo-cart"  :to="{name:'list.details',params:{id:zobo._id}}"  >
             <span class="title" v-if="zobo.title.length < 5">{{zobo.title}}</span>
             <span v-else class="title">{{zobo.title.substr(0,5) + '...'}}</span>
-            <img :src="zobo.cover" width="100%" style="max-height:250px"/>
+            <img :src="zobo.cover" width="100%" />
             <!-- &#8358; -->
             <v-card-actions class="card-foot d-flex justify-space-between pa-3 align-center" style="background:rgba(245,245,245,0.5)">
               <span style="color:#d34a1a">$ {{zobo.balance}}.00</span>
@@ -30,7 +30,7 @@
                     <v-list-item-title v-text="'Delete'"></v-list-item-title>
                   </v-list-item>
 
-                    <v-list-item to="#" >
+                    <v-list-item :to="{name:'zobo.edit',params:{id:zobo._id}}">
                     <v-list-item-title v-text="'Edit'"></v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -38,7 +38,6 @@
             </v-card-actions>
           </v-card>
         </v-flex>
-
 
       </transition-group>
     </v-layout>
@@ -101,12 +100,23 @@ export default {
 }
 .zobo-cart{
     background-image: linear-gradient(rgb(255, 255, 255) 80%,rgba(0,0,0,0.2) );
+
+    img{
+      object-fit:cover;
+      height:230px
+    }
     
 }
 
 @media (max-width: 600px) {
     .zobo-list-con{
     width:100%;
+
+     .zobo-cart{
+       img{
+         height:150px
+       }
+     }
 }
 }
 

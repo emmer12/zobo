@@ -9,7 +9,9 @@ import CxltToastr from "cxlt-vue2-toastr";
 import VueJwtDecode from "vue-jwt-decode"
 import moment from "moment"
 import Carousel3d from 'vue-carousel-3d';
- 
+import VueConfetti from 'vue-confetti'
+import infiniteScroll from 'vue-infinite-scroll'
+
 // import LottieAnimation from "lottie-web"
 // import  'lottie-vuejs'
 // import firebase from 'firebase/app'
@@ -17,6 +19,12 @@ import Carousel3d from 'vue-carousel-3d';
 
 import VueSocialSharing from 'vue-social-sharing'
 
+import VueCountdown from '@chenfengyuan/vue-countdown';
+
+Vue.component(VueCountdown.name, VueCountdown);
+
+
+Vue.use(VueConfetti)
 
 // const firebaseConfig = {
 //     apiKey: "AIzaSyAFcDUZViNv1_YmG7lgtIo9rJdZCrNJDWI",
@@ -29,7 +37,6 @@ import VueSocialSharing from 'vue-social-sharing'
 //     measurementId: "G-3NLV8945SD"
 //   };
 
-import infiniteScroll from "vue-infinite-scroll"
 
 
 // Vue.use(LottieAnimation)
@@ -59,6 +66,18 @@ Vue.filter("timeAgo",function(value){
     if(value){
         return moment(String(value)).fromNow('dd')
     }
+})
+
+
+Vue.filter("toCountdown",function(value){
+    if(value){
+        return moment.utc(value)-(new Date())
+    }
+})
+
+
+Vue.filter("birthday",function(value) {
+    return  moment(String(value)).format('MMMM') + ',' + moment(String(value)).format('D')
 })
 
 

@@ -18,6 +18,7 @@ var storage=multer.diskStorage({
 
 router.post('/create',middleware.authenticate,ZoboController.validateData('create'),ZoboController.create)
 
+router.patch('/update',middleware.authenticate,ZoboController.validateData('create'),ZoboController.update)
 
 router.get('/get-zobo-cat',middleware.authenticate,ZoboController.getCat)
 
@@ -25,8 +26,6 @@ router.get('/get-zobo-cat',middleware.authenticate,ZoboController.getCat)
 router.get('/get-my-zobos',middleware.authenticate,ZoboController.userZobos)
 
 router.get('/verify-test',ZoboController.verifyTest)
-
-
 
 router.get('/get-by-id/:id',middleware.authenticate,ZoboController.getById)
 
@@ -44,6 +43,14 @@ router.delete('/remove/:id',middleware.authenticate,ZoboController.destroyZobo)
 
 
 router.get('/yielded/:zoboId',middleware.authenticate,ZoboController.yieldedZobo)
+
+
+router.get('/feeds',middleware.authenticate,ZoboController.getAllFeeds)
+
+
+router.get('/get-celep-limit/',ZoboController.getCelepLimit)
+
+router.get('/get-celep-all/',ZoboController.getCelepAll)
 
 
 

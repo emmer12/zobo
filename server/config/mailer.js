@@ -11,7 +11,7 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-function sendConfirmationEmail(user) {
+function sendConfirmationEmail1(user) {
   // setup email data with unicode symbols
   let mailOptions = {
     from: '"Tunner" <info@tunner.com>', // sender address
@@ -35,11 +35,11 @@ function sendPasswordResetEmail(user) {
 
 
 
-function randomEmailwithTemplate(){
+function randomEmailwithTemplate(user){
  
 const email = new Email({
   message: {
-    from: 'niftylettuce@gmail.com'
+    from: 'hello@cellepay.com'
   },
   // uncomment below to send emails in development/test env:
   send: true,
@@ -55,7 +55,8 @@ email
       to: 'elon@spacex.com'
     },
     locals: {
-      name: 'Elon'
+      name: 'Emmer',
+      user
     }
   })
   .then(res=>{
@@ -65,6 +66,36 @@ email
     })
   .catch(console.error);
 }
+
+
+
+
+function sendConfirmationEmail(user){
+ 
+  const email = new Email({
+    message: {
+      from: process.env.EMAIL
+    },
+    // uncomment below to send emails in development/test env:
+    send: true,
+    transport: {
+      jsonTransport: true
+    }
+  });
+   
+  email
+    .send({
+      template: 'confirmation',
+      message: {
+        to: user.email
+      },
+      locals: {
+        user
+      }
+    })
+    .then(()=>{})
+    .catch(console.error);
+  }
 
 
 

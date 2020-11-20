@@ -1,7 +1,7 @@
 <template>
   <div class="signup-con">
      <div class="left">
-      <h2>Sign Up</h2>
+      <h2>Reset Password</h2>
       <v-img
         alt="App Logo"
         class="shrink mr-2 img"

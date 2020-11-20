@@ -1,12 +1,16 @@
 <template>
   <div class="zobo-con">
-
     <v-alert v-show="errors" type="error" :value="true">
       {{errors}}
     </v-alert>
 
+    <div v-if="loading">
+      <v-skeleton-loader v-bind="attrs" type="list-item-avatar-three-line,image"></v-skeleton-loader>
+      <v-skeleton-loader v-bind="attrs" type="card-avatar,article,actions"></v-skeleton-loader>
+    </div>
+
+    <div v-else>
     <v-layout v-if="zobo" class="pa-5" style="background:#fff;">
-      
     <v-avatar
       size="150"
       color="white"
@@ -15,7 +19,7 @@
     </v-avatar>
     <div class="pa-4">
         <h4 class="title">{{ zobo.user_id[0].firstname  }} {{zobo.user_id[0].lastname}}</h4>
-        <router-link to="#" class="body-2 primary--text">@{{ zobo.user_id[0].username}}</router-link>
+        <router-link :to="{name:'profile',params:{username:zobo.user_id[0].username}}" class="body-2 primary--text">@{{ zobo.user_id[0].username}}</router-link>    
     </div>
     </v-layout>
 
@@ -25,14 +29,14 @@
       <v-layout row wrap>
         <v-flex md6 xs12>
           <div style="width:100%">
-            <div>
+            <div class="img">
               <img :src="zobo.cover" width="100%" />
             </div>
           </div>
         </v-flex>
         <v-flex md6 xs12>
           <div class="pa-4">
-            <v-btn block color  style="cursor:none" rounded>{{zobo.title}}</v-btn>
+            <v-btn block color  style="cursor:text;" rounded>{{zobo.title}}</v-btn>
             <p class="py-4">{{zobo.description}}</p>
           </div>
           <div class="zobo pa-4">
@@ -43,15 +47,15 @@
 
             <div class="elevation-1">X</div>
             <div class="elevation-1">
-              <input type="number" min="1" @input="updateInput" :value="init" />
+              <input type="number" @blur="blurInput" min="1" @input="updateInput" :value="init" />
             </div>
-            <div class="rounded elevation-1" @click="setVal(3)">
+            <div class="rounded elevation-1 " :class="{active:multiple===3}" @click="setVal(3) ">
               <span>3</span>
             </div>
-            <div class="rounded elevation-1" @click="setVal(5)">
+            <div class="rounded elevation-1" :class="{active:multiple===5}" @click="setVal(5)">
               <span>5</span>
             </div>
-            <div class="rounded elevation-1" @click="setVal(10)">
+            <div class="rounded elevation-1" :class="{active:multiple===10}" @click="setVal(10)">
               <span>10</span>
             </div>
           </div>
@@ -62,30 +66,39 @@
         </v-flex>
       </v-layout>
     </div>
-
-    <share-dialog :dialog="dialog" @closeDialog="dialog=!dialog;value='';field=''"></share-dialog>
+       <count-down :date="zobo.date"></count-down>
+  
+       <share-dialog :dialog="dialog" @closeDialog="dialog=!dialog;value='';field=''"></share-dialog>
+    </div>
   </div>
 </template>
 
 <script>
 import ShareDialog from "../Dialogs/ShareDialog";
+import CountDown from "../Partials/CountDown";
 import {mapGetters} from 'vuex'
 export default {
   components: {
-    ShareDialog
+    ShareDialog,
+    CountDown
   },
   data() {
     return {
       dialog: false,
       active: true,
       loading:true,
-      errors:null
+      errors:null,
+      multiple:null
     };
   },
 
   methods: {
     setVal(val) {
+      this.multiple=val
       this.$store.dispatch("setZoboVal", val);
+    },
+    blurInput(){
+      this.multiple=null
     },
     getZobo() {
       this.loading=true
@@ -133,7 +146,17 @@ export default {
   max-width: 800px;
   left: 50%;
   transform: translateX(-50%);
+
+  .img{
+    height:300px;
+    img{
+      object-fit:cover;
+      height:100%;
+    }
+  }
 }
+
+
 
 .zobo {
   // background: #f6f6f9;
@@ -154,16 +177,17 @@ export default {
       text-align: center;
       line-height: 30px;
       cursor: pointer;
-      color: #d34a1a;
-      border: 1px solid #d34a1a;
+      color: #e50913;
+      border: 1px solid #e50913;
       transition: 0.3s ease-in-out;
       &.active {
-        background: #d34a1a;
+        background: #e50913;
         color: white;
       }
 
+
       &:hover {
-        background: #d34a1a;
+        background: #e50913;
         color: white;
       }
     }

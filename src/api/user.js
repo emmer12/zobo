@@ -5,24 +5,23 @@ const endPoint="/user";
 api.defaults.timeout=10000
 
 
-const getUser=(rootState)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const getUser=()=>{
+    // api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
     return api.get(endPoint+'/user')
 }
 
 
-const update=(rootState,data)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const update=(data)=>{
     return api.post(endPoint+'/update',data)
 }
 
-const follow=(rootState,data)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+
+
+const follow=(data)=>{
     return api.post(endPoint+'/follow',data)
 }
 
-const unfollow=(rootState,data)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const unfollow=(data)=>{
     return api.post(endPoint+'/unfollow',data)
 }
 
@@ -31,13 +30,11 @@ const getUserByUsername=(username)=>{
     return api.get(endPoint+'/z/'+username)
 }
 
-const getFollow=(rootState)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const getFollow=()=>{
     return api.get(endPoint+'/get-follow')
 }
 
-const getProfileFollow=(rootState,data)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const getProfileFollow=(data)=>{
     return api.get(endPoint+'/get-profile-follow/'+data.uid)
 }
 
@@ -45,21 +42,26 @@ const getCurrency=()=>{
     return api.get(endPoint+'/get-currency')
 }
 
-const setCurrency=(rootState,data)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const setCurrency=(data)=>{
     return api.patch(endPoint+'/set-currency',{data})
 }
 
 
-const sendEmail=(rootState)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const sendEmail=()=>{
     return api.post(endPoint+'/send-email')
 }
-const addSpecial=(rootState,data)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + rootState.auth.token
+const addSpecial=(data)=>{
     return api.post(endPoint+'/add-special',data)
 }
-
+const deleteSp=(data)=>{
+    return api.delete(endPoint+'/delete-special/'+data)
+}
+const getOtherUser=()=>{
+    return api.get(endPoint+'/get-other-user')
+}
+const searchUsers=(data)=>{
+    return api.get(endPoint+'/get-searched-user/?s='+data)
+}
 
 export default{
    getUser,
@@ -72,5 +74,8 @@ export default{
    getCurrency,
    setCurrency,
    sendEmail,
-   addSpecial
+   addSpecial,
+   deleteSp,
+   getOtherUser,
+   searchUsers
 }

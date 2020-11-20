@@ -66,10 +66,10 @@ export default {
       this.time = setTimeout(() => this.submitPin(val), 1000);
     },
     submitPin(val) {
-      this.loading = true;
       if (!val.length) return;
+      this.loading = true;
       this.$store.dispatch("submitPin", {val}).then(()=>{
-      this.pin=' '
+      this.pin=''
       }).catch(()=>{
         this.loading = false;
        this.error="Wrong pin"
@@ -77,7 +77,9 @@ export default {
       })
   },
     focusInput(){
-      this.$refs.pin.focus()
+      if (this.$refs.pin) {
+        this.$refs.pin.focus()
+      }
     },
   },
 
@@ -91,6 +93,7 @@ export default {
     authToken(){
       return this.$store.getters.authToken;
     },
+    
   }
 };
 </script>

@@ -2,9 +2,9 @@ import Api from './../../../api/zobo'
 
 export default {
 
-    getZoboCat({ commit,rootState }) {
+    getZoboCat({ commit}) {
         return new Promise((resolve, reject) => {
-            Api.getZoboCat(rootState).then(res => {
+            Api.getZoboCat().then(res => {
                commit('setZoboCat',res.data.zobos)
                resolve(res.data.zobos)
             }).catch(err => {
@@ -14,9 +14,9 @@ export default {
         })
     },
 
-    getMyZobo({ commit,rootState }) {
+    getMyZobo({ commit }) {
         return new Promise((resolve, reject) => {
-            Api.getMyZobo(rootState).then(res => {
+            Api.getMyZobo().then(res => {
                commit('setMyZobo',res.data.zobos)
                resolve(res.data.zobos)
             }).catch(err => {
@@ -26,9 +26,24 @@ export default {
         })
     },
 
-    createZobo({rootState,commit },data) {
+    createZobo({commit },data) {
         return new Promise((resolve, reject) => {
-            Api.create(data,rootState).then(res => {
+            Api.create(data,).then(res => {
+               resolve(res)
+            }).catch(err => {
+                if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
+                    localStorage.removeItem('pinToken')
+                    commit("destroyPinToken")
+                }
+                reject(err)
+
+            })
+        })
+    },
+    
+    updateZobo({commit },data) {
+        return new Promise((resolve, reject) => {
+            Api.update(data,).then(res => {
                resolve(res)
             }).catch(err => {
                 if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
@@ -42,9 +57,9 @@ export default {
     },
 
 
-      makePayment({rootState,commit },data) {
+      makePayment({commit },data) {
         return new Promise((resolve, reject) => {
-            Api.pay(data,rootState).then(res => {
+            Api.pay(data,).then(res => {
                localStorage.removeItem('zobo')
                localStorage.removeItem('init')
             //    dispatch('sendNotification',{
@@ -63,9 +78,9 @@ export default {
         })
     },
 
-    withdraw({rootState,commit },data) {
+    withdraw({commit },data) {
         return new Promise((resolve, reject) => {
-            Api.withdraw(data,rootState).then(res => {
+            Api.withdraw(data,).then(res => {
                resolve(res)
             }).catch(err => {
                 if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
@@ -78,11 +93,11 @@ export default {
         })
     },
 
-    uploadFile({rootState,commit},data){
+    uploadFile({commit},data){
         return new Promise((resolve,reject)=>{                
             let formData=new FormData();
             formData.append('file',data);
-            Api.upload(formData,rootState,commit)         
+            Api.upload(formData,commit)         
             .then(response=>{           
                 resolve(response)
             })
@@ -92,9 +107,9 @@ export default {
             })
         })
     },
-    getZoboDetails({rootState,commit },data) {
+    getZoboDetails({commit },data) {
         return new Promise((resolve, reject) => {
-            Api.getId(data,rootState).then(res => {
+            Api.getId(data,).then(res => {
                commit("setDetails",res.data.zobo);
                resolve(res)
             }).catch(err => {
@@ -141,9 +156,9 @@ export default {
     },
 
 
-    deleteZobo({commit,rootState},data) {
+    deleteZobo({commit},data) {
         return new Promise((resolve, reject) => {
-            Api.remove(rootState,data).then(res => {
+            Api.remove(data).then(res => {
                resolve(res.data)
                commit('removeZobo',data)
             }).catch(err => {
@@ -153,9 +168,9 @@ export default {
         })
     },
 
-    getTransactions({commit,rootState}) {
+    getTransactions({commit}) {
         return new Promise((resolve, reject) => {
-            Api.getTrans(rootState).then(res => {
+            Api.getTrans().then(res => {
                resolve(res.data)
                commit('setTransaction',res.data.transactions)
             }).catch(err => {
@@ -165,11 +180,44 @@ export default {
     },
 
 
-    getYield({commit,rootState},data) {
+    getYield({commit},data) {
         return new Promise((resolve, reject) => {
-            Api.getYield(rootState,data).then(res => {
+            Api.getYield(data).then(res => {
                resolve(res.data)
                commit('setYield',res.data.yielded)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    },
+
+    getFeeds({commit},data) {
+        return new Promise((resolve, reject) => {
+            Api.getFeeds(data).then(res => {
+               resolve(res.data)
+               commit('setFeeds',res.data.feeds)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    },
+
+    getCelepLimit({commit}) {
+        return new Promise((resolve, reject) => {
+            Api.getCelepLimit().then(res => {
+               resolve(res.data)
+               commit('getCelepLimit',res.data.celep)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    },
+
+    getCelepAll({commit}) {
+        return new Promise((resolve, reject) => {
+            Api.getYield().then(res => {
+               resolve(res.data.celep)
+               commit('getCelepAll',res.data.celep)
             }).catch(err => {
                 reject(err)
             })

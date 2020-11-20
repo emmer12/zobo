@@ -13,7 +13,8 @@ import ZoboList from '../components/Auth/ZoboListView';
 import ForgetPassword from '../components/Auth/ForgetPassword';
 import ResetPassword from '../components/Auth/ResetPassword';
 import Notifications from '../components/Auth/NotificationsPage';
-import Settings from '../components/Auth/Settings';
+import ProfileSettings from '../components/Auth/ProfileSettings';
+import AccountSettings from '../components/Auth/AccountSettings';
 import Profile from '../components/Auth/Profile';
 import Transactions from '../components/Auth/Transactions';
 // import ProfileView from '../components/Auth/ProfileView';
@@ -23,6 +24,8 @@ import Logout from '../components/Auth/Logout';
 import Page404 from '../components/pages/Page404';
 import MyZoboPage from '../components/pages/MyZoboPage';
 import EmailTest from '../components/pages/EmailTest';
+import EditZobo from '../components/pages/EditZobo';
+import Feeds from '../components/pages/Feeds';
 import StoreCat from '../components/pages/StoreCat';
 import EmailConfirm from '../components/pages/EmailConfirm';
 import Payment from '../components/Auth/Payment';
@@ -87,7 +90,7 @@ export const routes = [
     },
     { 
         path: '/store',
-        name: 'contact',
+        name: 'store',
         component: Contact
     },
      { 
@@ -129,7 +132,7 @@ export const routes = [
                 }
             },
             {
-                path: 'me/zobo/create',
+                path: 'me/c/create',
                 name: 'zobo.create',
                 component:CreateZobo,
                 meta: {
@@ -137,7 +140,7 @@ export const routes = [
                 }
             },
             {
-                path: 'me/zobo/transactions',
+                path: 'me/c/transactions',
                 name: 'zobo.transactions',
                 component:Transactions,
                 meta: {
@@ -145,15 +148,25 @@ export const routes = [
                 }
             },
             {
-                    path: 'me/zobo/:id',
+                    path: 'me/c/:id',
                     name: 'list.details',
                     component:ZoboDetails,
                     meta: {
                         requiresAuth: true,                              
                     }
                 },
+
+                 {
+                    path: 'c/:id/edit',
+                    name: 'zobo.edit',
+                    component:EditZobo,
+                    meta: {
+                        requiresAuth: true,                              
+                    }
+                },
+                
                 {
-                    path: 'me/balance',
+                    path: '/me/balance',
                     name: 'balance',
                     component:Balance,
                     meta: {
@@ -161,7 +174,7 @@ export const routes = [
                     }
                 },
                 {
-                    path: 'me/notifications',
+                    path: '/me/notifications',
                     name: 'all.notification',
                     component:Notifications,
                     meta: {
@@ -169,18 +182,28 @@ export const routes = [
                     }
                 },
                  {
-                            path:'me/settings',
-                            name:'settings',
-                            component:Settings,
+                            path:'/profile/settings',
+                            name:'profile.settings',
+                            component:ProfileSettings,
                             meta: {
                                 requiresAuth: true,                              
                             }
 
-                }
+                },
+                {
+                    path:'/account/settings',
+                    name:'account.settings',
+                    component:AccountSettings,
+                    meta: {
+                        requiresAuth: true,                              
+                    }
+
+        },
+                
         ]
     },
      {
-         path:'/z/:username',
+         path:'/c/:username',
          name:'profile',
          component:Profile,
      },
@@ -190,7 +213,15 @@ export const routes = [
         component: MyZoboPage,
         
     },
-    
+    { 
+        path: '/feeds',
+        name:'feeds',
+        component:Feeds,
+        meta: {
+            requiresAuth: true,                              
+        }
+        
+    },
     { 
         path: '/users/confirmation/:token',
         name:'user.e.confirm',

@@ -38,14 +38,19 @@ router.post('/send-email',middleware.authenticate,UserController.sendMail)
 
 router.post('/add-special',middleware.authenticate,UserController.addSpecial)
 
+router.delete('/delete-special/:id',middleware.authenticate,UserController.deleteSpecial)
+
 router.get('/get-follow',middleware.authenticate,FollowController.getfollow)
 
 router.get('/get-profile-follow/:uid',FollowController.getProfollow)
 
 router.get('/get-currency',UserController.getCurrency)
 
+router.get('/get-other-user',middleware.authenticate,UserController.getOtherUser)
+
 router.patch('/set-currency',middleware.authenticate,UserController.setCurrency)
 
+router.get('/get-searched-user',UserController.searchCelebs)
 
 var upload=multer({storage:storage,limits:{fileSize:2000000}}).single('file');
 router.post('/upload-file',middleware.authenticate,function(req,res,next){

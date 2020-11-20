@@ -4,22 +4,22 @@ const endPoint = "/zobo";
 
 api.defaults.timeout = 10000
 
-const create = (data, rootState) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const create = (data) => {
     return api.post(endPoint + '/create', data)
 }
 
-const getZoboCat = (rootState) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const update = (data) => {
+    return api.patch(endPoint + '/update', data)
+}
+
+const getZoboCat = () => {
     return api.get(endPoint + '/get-zobo-cat')
 }
-const getMyZobo = (rootState) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const getMyZobo = () => {
     return api.get(endPoint + '/get-my-zobos')
 }
 
-const getId = (data,rootState) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const getId = (data) => {
     return api.get(endPoint + '/get-by-id/'+data)
 }
 
@@ -32,8 +32,7 @@ const getSlug = (data) => {
 }
 
 
-const upload = (data,rootState, commit) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const upload = (data,commit) => {
     return api.post(endPoint + '/upload-file', data, {
         onUploadProgress: progressEvent => {
             let progress = Math.round(progressEvent.loaded / progressEvent.total * 100)
@@ -43,38 +42,47 @@ const upload = (data,rootState, commit) => {
     )
 }
 
-const remove = (rootState,data) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const remove = (data) => {
     return api.delete(endPoint + '/remove/'+data)
 }
 
 
 
-const pay = (data, rootState) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const pay = (data) => {
     return api.post(endPoint + '/payment', data)
 }
 
-const withdraw= (data, rootState) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const withdraw= (data) => { 
     return api.post(endPoint + '/my/withdraw', data)
 }
 
-const getTrans=(rootState) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const getTrans=() => {
     return api.get(endPoint + '/my/transactions')
 }
 
 
-const getYield=(rootState,data) => {
-    api.defaults.headers.common['Authorization'] = 'Bearer ' + rootState.auth.token
+const getYield=(data) => {
     return api.get(endPoint + '/yielded/'+data)
+}
+
+
+const getFeeds=() => {
+    return api.get(endPoint + '/feeds')
+}
+
+const getCelepLimit=() => {
+    return api.get(endPoint + '/get-celep-limit/')
+}
+
+const getCelepAll=() => {
+    return api.get(endPoint + '/get-celep-all/')
 }
 
 
 
 export default {
     create,
+    update,
     getZoboCat,
     getMyZobo,
     upload,
@@ -85,5 +93,8 @@ export default {
     getTrans,
     getIdVisitor,
     withdraw,
-    getYield
+    getYield,
+    getCelepAll,
+    getCelepLimit,
+    getFeeds,
 }

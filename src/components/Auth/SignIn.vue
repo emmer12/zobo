@@ -4,7 +4,7 @@
     <div class="right">
       <v-container grid-list-md>
         <v-flex>
-          <div class="pa-5">
+          <div class="">
              <div>
               <h1>Welcome back!</h1>
               <p>We missed you <router-link tag="a" class="primary--text" :to="{name:'access.signup'}">Don't have account yet<v-icon>mdi-help-circle</v-icon> </router-link></p>
@@ -17,7 +17,7 @@
                 type="error"
                 :value="!!serverErrors"
                 outlined
-              ><p v-html="error[0].msg"></p></v-alert>
+              ><p v-html="error[0].msg || error"></p></v-alert>
 
                 <v-alert type="info" :value="!!vmsg">
                 {{vmsg}}
@@ -137,15 +137,16 @@ export default {
               window.scrollTo(0,50)
             }else{
                  this.$toast.error({
-                title: "Server Error",
+                title: "Error",
                 message:err.response.data.msg
               });
+              this.serverErrors=[err.response.data.msg]
             }
           });
       } else {
         this.$toast.error({
-                title: "Server Error",
-                message:"Opps! something went wrong"
+                title: "Error",
+                message:"Opps! Please fill all required field"
          });
       }
     }

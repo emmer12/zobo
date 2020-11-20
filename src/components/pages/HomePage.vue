@@ -7,20 +7,34 @@
        <div class="header1">
          <h4>Welcome to Cellepay Where you get paid on your special day</h4>
        </div>
-
-
+      
     </section>
+
+
+
+   <section>
+        <v-container grid-list-md>
+           <v-layout  v-if="celep.length" row wrap>
+          <v-flex md3 sm4 xs12 v-for="(c, index) in celep" :index="index" :key="index" >
+            <zobo-card :zobo="c" :user="{}" :from="'home'" ></zobo-card>
+          </v-flex>
+       </v-layout>
+        </v-container>
+   </section>
   </div>
 </template>
 <script>
 
 import Banner from './../Partials/Banner'
-
+import ZoboCard from './../Partials/ZoboCard'
+import { mapGetters,mapActions } from 'vuex';
 export default {
   components: {
     Banner,
+    ZoboCard,
   },
   methods:{
+    ...mapActions(['getCelepLimit']),
             getCurrentLocation(){
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(this.setCurrentPosition);
@@ -28,6 +42,7 @@ export default {
                     alert('geoLocation not supported');
                 }
             },
+            
             setCurrentPosition(position){
               fetch('http://ipinfo.io',{
                 method:"GET"
@@ -51,12 +66,12 @@ export default {
   }),
   created () {
     this.getCurrentLocation()
+    this.getCelepLimit()
   },
 
   computed: {
-  user() {
-      return this.$store.getters.user
-  }
+    ...mapGetters(['user','celep'])
+
 }
 };
 </script>

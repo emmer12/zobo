@@ -16,10 +16,25 @@ export default {
             })
         })
     },
-    getUser({rootState,commit }) {
+    getUser({commit }) {
         return new Promise((resolve, reject) => {
-            Api.getUser(rootState).then(res => {
+            Api.getUser().then(res => {
                commit('setUser',res.data.user)
+               resolve(res)
+            }).catch(err => {
+                if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
+                    localStorage.removeItem('pinToken')
+                    commit("destroyPinToken")
+                }
+                reject(err)
+
+            })
+        })
+    },
+    searchUsers({commit },data) {
+        return new Promise((resolve, reject) => {
+            Api.getUser(data).then(res => {
+               commit('searchUsers',res.data.celebs)
                resolve(res)
             }).catch(err => {
                 if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
@@ -49,9 +64,9 @@ export default {
     },
 
 
-    setCurrency({commit,rootState },data) {
+    setCurrency({commit},data) {
         return new Promise((resolve, reject) => {
-            Api.setCurrency(rootState,data).then(res => {
+            Api.setCurrency(data).then(res => {
             //    commit('setCurrency',res.data.currency)
                resolve(res)
             }).catch(err => {
@@ -65,9 +80,9 @@ export default {
         })
     },
 
-    updateUser({rootState,commit },data) {
+    updateUser({commit },data) {
         return new Promise((resolve, reject) => {
-            Api.update(rootState,data).then(res => {
+            Api.update(data).then(res => {
                commit('setUser',res.data.user)
                resolve(res)
             }).catch(err => {
@@ -81,9 +96,25 @@ export default {
         })
     },
 
-    getFollow({rootState,commit }) {
+    getOtherUsers({commit }) {
         return new Promise((resolve, reject) => {
-            Api.getFollow(rootState).then(res => {
+            Api.getOtherUser().then(res => {
+               commit('setOtherUser',res.data.users)
+               resolve(res)
+            }).catch(err => {
+                if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
+                    localStorage.removeItem('pinToken')
+                    commit("destroyPinToken")
+                }
+                reject(err)
+
+            })
+        })
+    },
+
+    getFollow({commit }) {
+        return new Promise((resolve, reject) => {
+            Api.getFollow().then(res => {
             //    commit('setFollow',res.data)
                resolve(res)
             }).catch(err => {
@@ -96,9 +127,9 @@ export default {
             })
         })
     },
-    getProfileFollow({rootState,commit },data) {
+    getProfileFollow({commit },data) {
         return new Promise((resolve, reject) => {
-            Api.getProfileFollow(rootState,data).then(res => {
+            Api.getProfileFollow(data).then(res => {
                resolve(res)
             }).catch(err => {
                 if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
@@ -111,9 +142,9 @@ export default {
         })
     },
 
-    follow({rootState,commit},data) {
+    follow({commit},data) {
         return new Promise((resolve, reject) => {
-            Api.follow(rootState,data).then(res => {
+            Api.follow(data).then(res => {
                resolve(res)
             }).catch(err => {
                 if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
@@ -127,9 +158,9 @@ export default {
     },
 
 
-    unfollow({rootState,commit},data) {
+    unfollow({commit},data) {
         return new Promise((resolve, reject) => {
-            Api.unfollow(rootState,data).then(res => {
+            Api.unfollow(data).then(res => {
                resolve(res)
             }).catch(err => {
                 if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
@@ -142,9 +173,9 @@ export default {
         })
     },
 
-    sendEmail({rootState}) {
+    sendEmail() {
         return new Promise((resolve) => {
-            Api.sendEmail(rootState).then(res => {
+            Api.sendEmail().then(res => {
                resolve(res)
             }).catch(err => {
               console.log('====================================');
@@ -155,9 +186,9 @@ export default {
         
     },
 
-    addSpecial({rootState },data) {
+    addSpecial(undefind,data) {
         return new Promise((resolve, reject) => {
-            Api.addSpecial(rootState,data).then(res => {
+            Api.addSpecial(data).then(res => {
                resolve(res)
             }).catch(err => {
                 reject(err)
@@ -165,5 +196,17 @@ export default {
             })
         })
     },
+
+    deleteSp({commit },data) {
+        return new Promise((resolve, reject) => {
+            Api.deleteSp(data).then(res => {
+            commit('deleteSp',data)
+                resolve(res)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    },
+
 
 }

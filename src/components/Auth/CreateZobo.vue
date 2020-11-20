@@ -30,17 +30,19 @@
               v-if="newZobo.celep=='Celebrate me'"
               :items="['Birthday','Wedding','Graduation']"
               v-model="newZobo.title"
-              label="What are you celebrating"
+              label="What are you celebrating?"
               hint="Tell us what you are celebrating"
               v-on:change="(val)=>handleChange(val)"
               solo
             ></v-select>
+            
+
+            
 
 
             <div class="auto-complete"  v-if="newZobo.celep=='Celebrate me'">
                <v-btn color="" v-for="(custom, index) in fCustomText" :key="index" outlined rounded small @click="setVal(custom.msg)"> {{custom.msg}} </v-btn>              
             </div>
-
 
             <v-textarea
               row="2"
@@ -65,6 +67,36 @@
               :prepend-inner-icon="user.currency=='USD' ? 'mdi-currency-usd' : 'mdi-currency-ngn'"
               solo
             ></v-text-field>
+
+
+             <v-menu
+                v-if="newZobo.celep=='Celebrate me'"
+                ref="menu"
+                :close-on-content-click="false"
+                v-model="menu"
+                transition="scale-transition"
+                offset-y
+                :nudge-right="40"
+                min-width="290px"
+
+              >
+                <template v-slot:activator="{on}">
+                  <v-text-field
+                    label="Celebration date"
+                    v-model="newZobo.date"
+                    prepend-inner-icon="event"
+                    readonly
+                    v-on="on"
+                    solo
+                  ></v-text-field>
+                </template>
+                <v-date-picker
+                  ref="picker"
+                  v-model="newZobo.date"
+                  @change="$refs.menu.save(newZobo.date)"
+                  :min="new Date().toISOString().substr(0, 10)"
+                ></v-date-picker>
+              </v-menu>
 
               <v-btn v-if="!src.length" color="" class="my-5" @click="openUpload">Upload File</v-btn>
 
@@ -106,7 +138,7 @@ export default {
           },
           newZobo:{
             description:'',
-            title:''
+            title:'',
           },
           loadingC:true,
           loading:false,

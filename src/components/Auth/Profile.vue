@@ -1,7 +1,18 @@
 <template>
   <div>
-          <div class="profile-banner" v-if="profile && !loading">
-            <div class="d-flex flex-column align-center justify-center">
+          <div class="profile-banner">
+
+                <div class="b-day">
+                <v-icon color="primary">mdi-cake-layered</v-icon>
+                <p>{{profile.user.birthday | birthday }}</p>
+              </div>
+
+            <div  v-if="loading">
+               <div style="height:300px" class="d-flex flex-column align-center justify-center">
+                  <v-skeleton-loader min-width="200"  type="avatar" v-bind="attrs" ></v-skeleton-loader>
+               </div>
+            </div>  
+            <div v-else class="d-flex flex-column align-center justify-center">
               <v-avatar
                 size="100"
                 color="#ccc"
@@ -20,33 +31,43 @@
                   <v-btn v-else rounded @click="follow(profile.user._id)" class="mt-3" outlined color="primary" small dark>Follow</v-btn>
                 </div>
               <br>
-              <v-btn v-if="isLoggedIn && user && user.username===$route.params.username" :to="{name:'settings'}" color="success" small rounded outlined><v-icon left>mdi-pencil-outline</v-icon> Edit Profile</v-btn>
-
+              <v-btn v-if="isLoggedIn && user && user.username===$route.params.username" :to="{name:'profile.settings'}"  color="success" small rounded outlined><v-icon left>mdi-pencil-outline</v-icon> Edit Profile</v-btn>
+ 
               <!-- <div class="custom-avatar">
                 <v-icon size="150">mdi-heart</v-icon>
                 <img :src="require('./../../assets/images/avatar/avatar.png')" alt="alt">
               </div> -->
+
+          
           </div>
           <v-container grid-list-md>
-             <h4 class="pa-3 title elevation-1">Other post by {{profile.user.username | capFirst }} </h4>
+              <v-divider></v-divider>
+               <div class="header">
+                 <h4>Other post by {{profile.user.username | capFirst }} </h4>        
+              </div>
+              <v-divider></v-divider>
              <v-layout  v-if="profile.zobo.length" row wrap>
               <carousel-3d  :height="350"  :controls-visible="true">
-                  <slide v-for="(zobo, index) in profile.zobo" :index="index" :key="index" >
-                      <zobo-card :zobo="zobo" :user="profile.user"  ></zobo-card>
+                  <slide v-for="(zobo, index) in profile.zobo" :index="index" :key="index" >                     
+
+                    
+                      <zobo-card :from="'profile'" :zobo="zobo" :user="profile.user"  ></zobo-card>
                   </slide>
                 </carousel-3d>
+
+
+                <count-down v-if="profile && closestDate !== 'Infinity' " :date="closestDate"></count-down>
              </v-layout>
               <div v-else>
-                      <v-alert type="info" :value="true">
-                        User has no Zobo
-                    </v-alert>
+                       <v-icon>info</v-icon> User has no posted
               </div>
           </v-container>
-          </div>
-          <div v-else class="pa-4" v-show="!loading">
+
+          <div class="pa-4" v-show="!loading && !profile">
             <v-alert type="warning" :value="true">
               Oops,Page not found
             </v-alert>
+          </div>
           </div>
           
   </div>
@@ -54,10 +75,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import CountDown from "../Partials/CountDown";
 import ZoboCard from './../Partials/ZoboCard'
 export default {
   components: {
-    ZoboCard
+    ZoboCard,
+    CountDown
   },
   data() {
     return {
@@ -111,7 +134,22 @@ export default {
   },
 
   computed: {
-     ...mapGetters({isLoggedIn:'loggedIn',user:'user',profile:'profile'})
+     ...mapGetters({isLoggedIn:'loggedIn',user:'user',profile:'profile'}),
+
+     closestDate(){
+       let dates = this.profile.user.special
+       let now =new Date();
+       let closest=Infinity;
+
+       dates.forEach((d)=>{
+         const date=new Date(d.date)
+         if (date>=now && (date < new Date(closest) || date < closest)) {
+           closest = d.date
+         }
+       })
+
+       return closest;
+     }
   }
 };
 </script>
@@ -141,10 +179,23 @@ export default {
   & > div{
     transform: translateY(50px);
   }
+
+  .b-day{
+    // top:0%;
+    right:0px;
+    position: absolute;
+    background:rgba(255, 255, 255, 0.71);
+    padding:10px;
+    top:90px;
+    max-height:60px;
+    border-top-left-radius:45px;
+    border-top-right-radius:45px;
+    text-align:center
+  }
 }
 
 .carousel-3d-slide{
-  color:red;
+  // color:red;
   background-color:white;
   border:none
 } 

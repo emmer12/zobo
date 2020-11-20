@@ -35,7 +35,6 @@
                            </v-select>
                             <v-menu
                                 ref="menu"
-                                lazy
                                 :close-on-content-click="false"
                                 v-model="menu"
                                 transition="scale-transition"
@@ -58,7 +57,8 @@
                                 ref="picker"
                                 v-model="special.date"
                                 @change="$refs.menu.save(special.date)"
-                                min="1950-01-01"
+                                :min="new Date().toISOString().substr(0, 10)"
+                               
                                 
                                 ></v-date-picker>
                             </v-menu>
@@ -122,6 +122,7 @@ methods: {
             this.$router.push({name:'dashboard'})
         }
     }).catch(()=>{
+        this.loading=false
         this.$toast.error({
                 title: "Server Error",
                 message:"Opps! something went wrong"

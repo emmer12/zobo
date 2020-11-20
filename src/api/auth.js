@@ -14,8 +14,7 @@ const login=(data)=>{
 }
 
 
-const checkPin=(data,state)=>{
-    api.defaults.headers.common['Authorization']='Bearer ' + state.token
+const checkPin=(data)=>{
     return api.post(endPoint+'/check-pin',data)
 
 }

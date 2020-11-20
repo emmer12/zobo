@@ -20,6 +20,9 @@ let zoboSchema=mongoose.Schema({
    slug:{
     type:String,
   },
+  date:{
+    type:Date
+  },
   type:[{
     type:Schema.Types.ObjectId,
     ref:'zoboCats'

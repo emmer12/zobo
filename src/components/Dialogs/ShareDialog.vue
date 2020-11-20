@@ -17,7 +17,7 @@
           </v-btn>
         </v-toolbar>
         <div class="pt-5 mx-5 text-center">
-          <p class="title">We super excited to join you in celebrating your ________ today! Share your links on all your social media to recieve some <v-icon color="primary">mdi-hand-heart</v-icon></p>
+          <p class="title">We are super excited to join you in celebrating your ________ today! Share your links on all your social media to recieve some <v-icon color="primary">mdi-hand-heart</v-icon></p>
         </div>
         <div class="d-flex justify-center pa-10 s-con">
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="user.confirmed">
     <section class="bottom-nav d-flex d-sm-none" id="foot-nav">
       <router-link tag="div" :to="{name:'zobo.list'}" :class="{'active':$route.name=='zobo.list'}">
         <v-icon>mdi-home-lightbulb-outline</v-icon>
@@ -11,9 +11,9 @@
         <div>Balance</div>
       </router-link>
 
-      <router-link tag="div" :class="{'active':$route.name=='settings'}" :to="{name:'settings'}">
-        <v-icon>mdi-cog-outline</v-icon>
-        <div>Settings</div>
+      <router-link tag="div" :class="{'active':$route.name=='all.notification'}" :to="{name:'all.notification'}" >
+        <v-icon>mdi-bell-outline</v-icon>
+        <div>Alert</div>
       </router-link>
     </section>
   </div>
@@ -54,6 +54,7 @@ export default {
       this.prevScroll = curScroll;
     },
 
+
     toggleHeader: function(direction, curScroll) {
       var header = document.getElementById("foot-nav");
       if (direction === 2 && curScroll > 70) {
@@ -69,6 +70,11 @@ export default {
   },
   created() {
     window.addEventListener("scroll", this.checkScroll);
+  },
+  computed: {
+    user(){
+      return this.$store.getters.user
+    }
   }
 };
 </script>

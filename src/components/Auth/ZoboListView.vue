@@ -3,11 +3,11 @@
      <v-container grid-list-xs>
         <div class="d-flex justify-center align-center empty" style="flex-direction:column" v-if="!zobos.length && !loading">
         <div class="text-center">
-          <h2 style="color:rgba(0,0,0,0.2)" >Empty</h2>
            <div> 
-             <v-icon class="block" size="100" color="#cccccc" >mdi-cup-off-outline</v-icon>
+             <v-icon class="block" size="80" color="#cccccc" >mdi-flask-empty </v-icon>
            </div>
-           <v-btn color="primary" :to="{name:'zobo.create'}" outlined>Create Zobo<v-icon  right>mdi-plus</v-icon></v-btn>
+          <h3 style="color:rgba(0,0,0,0.2)" class="mb-4">No posts yet</h3>
+           <v-btn color="primary" :to="{name:'zobo.create'}" outlined>Create<v-icon  right>mdi-plus</v-icon></v-btn>
         </div>
       </div>
       <div v-else>

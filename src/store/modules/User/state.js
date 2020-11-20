@@ -6,5 +6,7 @@ export default {
       user:null,
       role:localStorage.getItem('role') || null,
       profile:null,
-      currencies:[]
+      currencies:[],
+      otherUsers:[],
+      celeb:[]
     }

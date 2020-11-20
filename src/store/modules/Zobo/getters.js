@@ -25,5 +25,11 @@ export default {
     },
     yield(state){
         return state.yield
+    },
+    celep(state){
+        return state.celep
+    },
+    feeds(state){
+        return state.feeds
     }
 }

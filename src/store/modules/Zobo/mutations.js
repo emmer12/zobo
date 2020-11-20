@@ -30,6 +30,12 @@
             },
             setYield(state,data){
                 state.yield=data
+            },
+            setFeeds(state,data){
+                state.feeds=data
+            },
+            getCelepLimit(state,data){
+                state.celep=data
             }
             
 

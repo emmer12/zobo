@@ -6,7 +6,7 @@
           <img src="../../assets/images/svg/Cellepay_logo_Icon_White+PNG.png" width="50px" />
         </div>
 
-        <h4>$ {{ result }}</h4>
+        <h1>$ {{ result }}</h1>
       </div>
       <div class="pay-details">
         <h4 class="title pb-5">Payers actions</h4>

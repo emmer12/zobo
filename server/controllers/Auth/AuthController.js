@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require("../../modules/users")
 const {check,validationResult}=require('express-validator')
 const Mailer = require('./../../config/mailer')
-
+const { userFilter }=require('../UserController')
 const AuthController = {
     create,
     login,
@@ -25,7 +25,7 @@ function validateData(field){
                 // check('location').notmnisEmpty().withMessage('location is required'),
                 check('email').not().isEmpty().withMessage('email is required'),
                 check('email').isEmail().withMessage('inverlid email address'),
-                // check('birthday').not().isEmpty().withMessage('date must not be empty'),
+                check('birthday').not().isEmpty().withMessage('date must not be empty'),
                 check('pin').not().isEmpty().withMessage('pin is required'),
                 check('password').not().isEmpty().withMessage('password is required'),
                 check('password').isLength({min:6}).withMessage('password must not be less than 6 value')
@@ -74,20 +74,7 @@ function checkPin(req, res, next) {
         })
 
 }
-function userFilter(user) {
-    let newUser = {}
-    newUser._id = user._id
-    newUser.username = user.username
-    newUser.balance = user.balance
-    newUser.firstname = user.firstname
-    newUser.lastname = user.lastname
-    newUser.email = user.email
-    newUser.location = user.location
-    newUser.createdAt = user.createdAt
-    newUser.profile_image = user.profile_image
-    newUser.confirmed = user.confirmed
-    return newUser
-}
+
 
 
 function login(req, res, next) {
@@ -132,9 +119,10 @@ function create(req, res, next) {
     const firstname = req.body.firstname;
     const lastname = req.body.lastname;
     const email = req.body.email;
-    // const birthday = req.body.birthday;
+    const birthday = req.body.birthday;
     const password = req.body.password;
     const pin = req.body.pin;
+    const profile_image=`${process.env.HOST}/images/profile.png`
     // const location = req.body.location;
 
 
@@ -170,8 +158,10 @@ function create(req, res, next) {
                     lastname,
                     username,
                     email,
+                    birthday,
                     password,
                     pin,
+                    profile_image,
 
                 })
 
@@ -180,9 +170,6 @@ function create(req, res, next) {
                 newUser.confirmationToken = newUser.setConfirmationToken()
                 newUser.save(function (err) {
                     if (err) {
-                        console.log('====================================');
-                        console.log(err);
-                        console.log('====================================');
                         res.status(400).json({
                             error: true,
                             msg: "something went wrong,please try again later",

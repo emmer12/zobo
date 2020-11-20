@@ -22,6 +22,10 @@ let notificationSchema = mongoose.Schema({
   recipient: [{
     type: Schema.Types.ObjectId,
     ref: 'users'
+  }],
+  zobo_id: [{
+    type: Schema.Types.ObjectId,
+    ref: 'zobos'
   }]
 },
   {

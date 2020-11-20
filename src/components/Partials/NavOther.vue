@@ -26,7 +26,7 @@
       </div>
 
       <v-row class="ma-10 d-none d-sm-flex">
-        <div class="c-wrapper" v-if="user">
+        <div class="c-wrapper" v-if="user  && user.confirmed">
           <div class="c-select" :class="{open:openCurrency}">
             <div class="c-trigger" @click="openCurrency=!openCurrency">
               <span>{{user.currency || 'USD'}}</span>
@@ -36,7 +36,6 @@
             <div class="c-options"  v-if="currencies.length">
               <span class="c-option" v-for="(item, index) in currencies" :key="index" :class="{selected:user.currency==item.unit}" :data-value="item.unit" @click="setCurrency">{{item.unit}}</span>
               <!-- <span class="c-option" :class="{selected:currency=='NAIRA'}" data-value="NAIRA" @click="setCurrency">NAIRA</span> -->
-
             </div>
           </div>
         </div>   
@@ -45,16 +44,20 @@
 
 
      <v-spacer></v-spacer>
-      <div class="nav-search  d-none d-sm-flex" >
-        <v-text-field prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" ></v-text-field>
+      <div class="nav-search d-none d-sm-flex"  v-if="user && user.confirmed">
+        <v-text-field prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading" clearable ></v-text-field>
       </div>
-      <div class="mx-4 mt-2" v-if="isLoggedIn" style="cursor:pointer" @click="openNote">
+      <router-link class="ml-4" style="cursor:pointer" v-if="isLoggedIn && user && user.confirmed" tag="div" :to="{name:'feeds'}">
+         <!-- Feeds -->
+         <v-icon size="35">mdi-rss</v-icon>
+      </router-link>
+      <div class="mx-4 mt-2 d-none d-sm-flex" v-if="isLoggedIn && user && user.confirmed" style="cursor:pointer" @click="openNote">
         <v-badge color="success" :content="count || '0'">
           <v-icon size="30">mdi-bell-outline</v-icon>
         </v-badge>
       </div>
 
-      <v-btn @click="toggleDrawer" class="d-flex d-sm-none" icon color="primary">
+      <v-btn @click="toggleDrawer"  v-if="user && user.confirmed" class="d-flex d-sm-none" icon color="primary">
         <div class="bar"  :class="{added:drawer}">
           <span></span>
           <span></span>
@@ -62,7 +65,7 @@
         </div>
       </v-btn>
 
-      <div class="d-none d-sm-flex">
+      <div class="d-none d-sm-flex" >
         <ul class="d-flex">
           <li v-show="!isLoggedIn">
             <router-link :to="{name:'access.signin'}">Sign in</router-link>
@@ -80,13 +83,14 @@
           text
           @click="dropdownPro=!dropdownPro"
         >
-          <v-icon color="grey">mdi-account-circle</v-icon>
+          <v-icon color="grey">mdi-account-circle</v-icon> 
           <v-icon right color="grey">mdi-chevron-down</v-icon>
         </v-btn>
         <div
-          v-if="user && user.profile_image!=='profile.png'"
+          v-if="user && user.profile_image!=='profile.png' && user.confirmed"  
           @click="dropdownPro=!dropdownPro"
           style="cursor:pointer"
+        
         >
           <v-avatar size="40" color="white">
             <img
@@ -127,10 +131,22 @@
           <v-divider></v-divider>
 
           <v-list>
-            <router-link tag="div" style="cursor:pointer" :to="{name:'settings'}">
+            <div>
               <v-icon left>mdi-cog</v-icon>Settings
-            </router-link>
+            </div>
           </v-list>
+            <div class="ml-8">
+                <v-list>
+                <router-link tag="div" style="cursor:pointer;font-size:14px" :to="{name:'account.settings'}">
+                  Account Settings
+                </router-link>
+                </v-list>
+                <v-list>
+                  <router-link tag="div" style="cursor:pointer;font-size:14px" :to="{name:'profile.settings'}">
+                    Profile Settings
+                  </router-link>
+            </v-list>
+            </div>
           <v-divider></v-divider>
           <v-list>
             <router-link tag="div" :to="{name:'logout'}" style="cursor:pointer">
@@ -148,8 +164,8 @@
 
     <transition
       v-if="isLoggedIn"
-      enter-active-class="animated fadeInUp"
-      leave-active-class="animated fadeOutDown"
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
     >
       <notifications-view
         :notifications="notifications"
@@ -177,6 +193,8 @@ export default {
       drawer: false,
       notifyShow: false,
       openCurrency:false,
+      search:"",
+      loading:false
     };
   },
 
@@ -198,7 +216,24 @@ export default {
       this.$store.dispatch('setCurrency',currency).then(()=>{
         this.$store.dispatch('getUser')
       })
-    }
+    },
+
+    submitSearch(val){
+      if (!val.length) return;
+       this.loading = true;
+       this.$store.dispatch("searchUsers", {val}).then(()=>{
+      }).catch(()=>{
+        this.loading = false;
+      })
+    },
+
+     waitForIt(val) {
+      if (this.time) {
+        clearTimeout(this.time);
+      }
+      this.error = false;
+      this.time = setTimeout(() => this.submitSearch(val), 1000);
+    },
   },
 
   watch: {
@@ -208,6 +243,10 @@ export default {
       if (localStorage.getItem('token')) {
         this.notify();
       }
+    },
+
+     search(val) {
+      this.waitForIt(val);
     }
   },
   mounted() {

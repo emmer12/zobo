@@ -18,10 +18,9 @@ export default {
     },
 
 
-    submitPin({ commit, state,rootState }, data) {
-
+    submitPin({ commit,rootState }, data) {
         return new Promise((resolve, reject) => {
-            Api.checkPin(data, state).then(res => {
+            Api.checkPin(data).then(res => {
                 let pinToken = res.data.pinToken;
                 let token = res.data.token;
                 localStorage.setItem('pinToken', pinToken);
@@ -39,12 +38,11 @@ export default {
     },
 
 
-    confirmEmail({store},data) {
+    confirmEmail({dispatch},data) {
         return new Promise((resolve, reject) => {
-            
             Api.confirmEmail(data).then(res => {
-                console.log(store);
                 resolve(res)
+                dispatch("getUser")
             }).catch(err => {
                 reject(err)
             })

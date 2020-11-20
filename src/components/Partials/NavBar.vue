@@ -105,18 +105,18 @@ export default {
   .bar {
     &.added{
       span{
-        background: red;
+        background: #e50913;
         &:nth-child(1){
         transform: rotate(-41deg);
         position: relative;
-        bottom: -12px;
+        bottom: -10px;
         }
         &:nth-child(2){
           transform: scale(1.5);
         }
         &:nth-child(3){
             transform: rotate(45deg);
-            top: -12px;
+            top: -10px;
             position: relative;
         
         }
@@ -124,9 +124,9 @@ export default {
     
     }
 
-    width: 70%;
+    width: 60%;
     & span{
-    height:6px;
+    height:4px;
     width:100%;
     margin-top:4px;
     background: #e50913;
@@ -136,11 +136,11 @@ export default {
     
 
     &:nth-child(2){
-     width: 10px;
-     height:10px;
+     width: 8px;
+     height:8px;
      border-radius:5px;
      text-align:center;
-     margin-left: 12px;
+     margin-left: 10px;
     }
     }
 

@@ -14,7 +14,7 @@
           <h2>Sign Up,</h2>
         </div> -->
         <v-flex>
-          <div class="pa-5">
+          <div class="">
             <div>
               <h1>Get started with Cellpay</h1>
               <p>Join now and start recieving gifts <router-link tag="a" class="primary--text" :to="{name:'access.signin'}">Already has an account <v-icon>mdi-help-circle</v-icon> </router-link></p>
@@ -28,7 +28,7 @@
                 :value="!!serverErrors"
                 outlined
               >
-                <p v-html="error[0].msg"></p>
+                <p v-html="error[0].msg || error"></p>
               </v-alert>
               <v-alert type="info" :value="!!vmsg">{{vmsg}}</v-alert>
 
@@ -79,7 +79,7 @@
                 required
               ></v-select> -->
 
-              <!-- <v-menu
+             <v-menu
                 ref="menu"
                 lazy
                 :close-on-content-click="false"
@@ -91,8 +91,9 @@
               >
                 <template v-slot:activator="{on}">
                   <v-text-field
-                    label="Birthday date"
+                    label="Next birthday date"
                     v-model="newUser.birthday"
+                    :rules="[rules.required]"
                     prepend-inner-icon="event"
                     readonly
                     v-on="on"
@@ -103,10 +104,9 @@
                   ref="picker"
                   v-model="newUser.birthday"
                   @change="$refs.menu.save(newUser.birthday)"
-                  min="1950-01-01"
-                  :max="new Date().toISOString().substr(0, 10)"
+                  :min="new Date().toISOString().substr(0, 10)"
                 ></v-date-picker>
-              </v-menu> -->
+              </v-menu> 
 
               <v-text-field
                 v-model="newUser.password"
@@ -127,11 +127,8 @@
                 name="pin"
                 label="Enter your pin"
                 hint="Value must be 4 digit"
-                :append-icon="pin ? 'visibility' : 'visibility_off'"
-                :append-icon-cb="() => (pin = !pin)"
                 :rules="[rules.required,rules.pinLength]"
                 type="number"
-                @click:append="() => (pin = !pin)"
                 solo
               ></v-text-field>
 
@@ -207,6 +204,7 @@ export default {
     register() {
       if (this.$refs.form.validate()) {
         this.loading = true;
+         this.serverErrors=null,
         this.$store
           .dispatch("registerUser", this.newUser)
           .then(() => {
@@ -226,7 +224,6 @@ export default {
             }
           })
           .catch(err => {
-            alert();
             this.loading = false;
             if (err.response.data.global) {
               this.serverErrors =
@@ -237,10 +234,12 @@ export default {
               });
               window.scrollTo(0, 50);
             } else {
+              
               this.$toast.error({
                 title: "Server Error",
                 message: err.response.data.msg
               });
+               this.serverErrors=[err.response.data.msg]
             }
 
             this.newUser.password = "";
@@ -248,7 +247,6 @@ export default {
       } else {
         this.$toast.error({
           title: "Validation Error",
-
           message: "Opps something went wrong, all field required"
         });
       }

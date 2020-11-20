@@ -15,7 +15,7 @@ let userSchema=mongoose.Schema({
   },
   birthday:{
     type:Date,
-    required:false
+    required:true
   },
   username:{
     type:String,
@@ -45,7 +45,6 @@ let userSchema=mongoose.Schema({
   profile_image:{
     type:String,
     required:false,
-    default:'default.png'
   },
   confirmed:{
     type:Boolean,
@@ -76,11 +75,6 @@ let userSchema=mongoose.Schema({
     type:String,
     required:false,
     default:"USD"
-  },
-  profile_image:{
-    type:String,
-    required:false,
-    default:'profile.png'
   },
   card_id:[{
     type:Schema.Types.ObjectId,
@@ -114,11 +108,11 @@ userSchema.methods.setConfirmationToken=function setConfirmationToken() {
   return this.confirmationToken=this.tokenize()
 }
 userSchema.methods.generateConfirmationUrl=function generateConfirmationUrl() {
-  return `${process.env.HOST}/users/confirmation/${this.confirmationToken}`
+  return `${process.env.FRONT_END_URL}/users/confirmation/${this.confirmationToken}`
 }
 
 userSchema.methods.generateResetPasswordLink=function generateResetPasswordLink() {
-  return `${process.env.HOST}/reset-password/${this.resetPasswordToken()}`
+  return `${process.env.FRONT_END_URL}/reset-password/${this.resetPasswordToken()}`
 }
 
 

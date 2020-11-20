@@ -5,8 +5,9 @@ const Special = require("./../modules/special")
 const Currency = require("./../modules/currency")
 const { currencyConverter } = require("./../utility")
 const Mailer = require('../config/mailer')
-
+let ObjectId=require('mongodb').ObjectId;
 // let mongoose = require('mongoose');
+const Following = require("./../modules/following")
 
 
 const UserController = {
@@ -17,7 +18,10 @@ const UserController = {
     getCurrency,
     setCurrency,
     sendMail,
-    addSpecial
+    addSpecial,
+    deleteSpecial,
+    getOtherUser,
+    searchCelebs
     // requestPasswordReset,  
     // passwordReset,
     // confirmPasswordReset
@@ -34,29 +38,25 @@ function escapeRegex(text) {
 
 
 
-function search(req, res) {
-    let query = req.query.q
+function searchCelebs(req, res) {
+    let query = req.query.s
     if (query) {
         const regex = new RegExp(escapeRegex(query), 'gi')
         User.find({ username: regex })
-            .limit(3)
+            .limit(20)
             .sort({ created_at: -1 })
             .exec(function (err, users) {
-                Feed.find({ title: regex })
-                    .limit(3)
-                    .sort({ created_at: -1 })
-                    .exec(function (err, challenges) {
-                        res.status(200).json({
-                            success: true,
-                            result: {
-                                users,
-                                challenges
-                            }
-                        })
+                console.log('====================================');
+                console.log(users);
+                console.log('====================================');                
+                    res.status(200).json({
+                        success: true,
+                        celebs:users
                     })
             })
     }
 }
+
 async function getUsers(req, res, next) {
 
     var limit = parseInt(req.query.limit)
@@ -85,11 +85,29 @@ async function getUsers(req, res, next) {
 
     }
 
+function usersFilter(users) {
+    // let data={}
+   let newUsers;
+   newUsers= users.map(user=>{
+        return {
+            id:user._id,
+            username:user.username,
+            profile_image:user.profile_image,
+            lastname:user.lastname,
+            firstname:user.firstname
+
+        }
+    })    
+
+    return newUsers
+}    
+
 function userFilter(user) {
     let newUser = {}
     newUser._id = user._id
     newUser.username = user.username
     newUser.balance = user.balance
+    newUser.special = user.special
     newUser.phoneNo = user.phoneNo
     newUser.birthday = user.birthday
     newUser.firstname = user.firstname
@@ -102,6 +120,24 @@ function userFilter(user) {
     newUser.confirmed = user.confirmed
     newUser.currency = user.currency
     return newUser
+}
+
+async function getOtherUser(req,res){
+    await Following.findOne({ user_id: req.user._id }).exec(function (err, data) {
+        if (data) {
+          User.find({_id:{$nin:data.following_id}}).limit(6).exec((err,users)=>{
+              res.status(200).json({
+                users:usersFilter(users)
+              })
+          })      
+        }else{
+            User.find({}).limit(6).exec((err,users)=>{
+                res.status(200).json({
+                  users:usersFilter(users)
+                })
+            }) 
+        }
+ })
 }
 
     
@@ -136,6 +172,25 @@ function addSpecial(req,res){
         })
     })
 }
+
+
+function deleteSpecial(req, res) {
+    Special.remove({ _id: req.params.id }).exec(function (err, special) {
+                if (special) {
+                User.findOneAndUpdate({ _id: req.user._id},{$pull:{special:{_id:ObjectId(req.params.id)}}},{new:true}).then((data)=>{
+                    res.status(200).json({
+                            success: true,
+                        })
+                    })
+                }else{
+                    res.status(400).json({
+                        success: false,
+                    })
+                }
+            })
+}
+
+
 
 function updateProfile(req, res) {
     let field = req.body.field;
@@ -172,7 +227,8 @@ function updateProfile(req, res) {
         })
     }
     else if (field == "password") {
-        if (req.user.validPassword(value)) {
+        let password=req.body.password;
+        if (req.user.validPassword(password)) {
             let data = {}
             data[field] = req.user.encryptPassword(req.body.password_new);
             update(res, data, user_id)
@@ -259,8 +315,8 @@ function setCurrency(req,res) {
   }
 
 
-  function sendMail() { 
-    Mailer.randomEmailwithTemplate()
+  function sendMail(req,res) { 
+    Mailer.randomEmailwithTemplate(req.user)
       console.log('====================================');
       console.log('sebnding.....');
       console.log('====================================');

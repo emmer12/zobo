@@ -10,5 +10,11 @@ export default {
     },
     role(state){
         return state.role
+    },
+    ousers(state){
+        return state.otherUsers
+    },
+    celeb(state){
+        return state.celeb
     }
 }

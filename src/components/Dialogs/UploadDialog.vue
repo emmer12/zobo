@@ -9,7 +9,8 @@
     >
       <v-card flat class="pa-3">
       <v-toolbar dense>
-        <span class="title">Upload File</span>
+        <span class="title"  v-if="from ==='settings'">Upload Profile pic</span>
+        <span class="title" v-else>Upload File</span>
         <v-spacer></v-spacer>
         <v-btn icon color="red" @click="closeDialog">
           <v-icon>mdi-close</v-icon>
@@ -17,7 +18,7 @@
       </v-toolbar>
       
 
-     <section class="conain">
+     <section class="conain" v-if="from !=='settings' ">
         <div class="images-div">
         <div class="image" v-for="(image, index) in filterImages" :key="index" @click="selected(image.url)">
           <img 
@@ -195,5 +196,15 @@ export default {
         opacity:0.8
       }
     }
+  }
+
+  @media (max-width:600px){
+   .images-div{
+   .image{
+      height:90px;
+      width:90px;
+
+   }
+   }
   }
 </style>

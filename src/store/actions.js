@@ -1,9 +1,9 @@
 import Api from './../api/notification'
 
 export default {
-    getNotifications({ commit,state}) {
+    getNotifications({ commit}) {
         return new Promise((resolve, reject) => {
-            Api.get(state).then(res => {
+            Api.get().then(res => {
                commit('setNotifiction',res.data.notifications)
                resolve(res.data)
             }).catch(err => {
@@ -12,9 +12,9 @@ export default {
             })
         })
     },
-    getAlltNotifications({ commit,state}) {
+    getAlltNotifications({ commit}) {
         return new Promise((resolve, reject) => {
-            Api.getAll(state).then(res => {
+            Api.getAll().then(res => {
                commit('setAllNotifiction',res.data.notifications)
                resolve(res.data)
             }).catch(err => {
@@ -23,9 +23,9 @@ export default {
             })
         })
     },
-    markAsRead({state}) {
+    markAsRead() {
         return new Promise((resolve, reject) => {
-            Api.markAsRead(state).then(res => {
+            Api.markAsRead().then(res => {
                resolve(res.data)
             }).catch(err => {
                 reject(err)

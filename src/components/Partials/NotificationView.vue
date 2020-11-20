@@ -5,7 +5,7 @@
           <v-icon size="30">mdi-close</v-icon>
       </div>
        <div v-if="notifications.length<=0" class="mt-10">
-        <v-alert type="info" :value="true">
+        <v-alert type="info" :value="true" outlined>
           No new Notification
         </v-alert>
       </div>
@@ -22,7 +22,7 @@
           <v-list class="elevation-1 pa-2 mt-2" v-if="item.type==='payment'">
               <div class="d-flex">
                 <v-icon  color="primary">mdi-emoticon </v-icon>
-                <span class="pl-3">Someone but you a lunch </span>
+                <span class="pl-3">Someone just cellepayed you </span>
                 <v-spacer></v-spacer>
                 <v-icon  color="primary">mdi-alarm-light-outline </v-icon>
               </div>
@@ -36,7 +36,7 @@
             <v-list class="elevation-1 pa-2 mt-2" v-if="item.type==='z-created'">
               <div class="d-flex">
                 <v-icon  color="primary">mdi-post-outline </v-icon>
-                <span class="pl-3">Someone but you a lunch </span>
+                <span class="pl-3">Someone just cellepayed you</span>
                 <v-spacer></v-spacer>
                 <v-icon  color="primary">mdi-alarm-light-outline </v-icon>
               </div>
@@ -78,7 +78,7 @@ export default {
        top:60px;
        background:rgba($color: #fff, $alpha: 0.8);
        z-index: 9999;
-       height:100vh;
+       max-height:80vh;
        overflow-y: scroll;
        right:0px;
        & .close{

@@ -12,10 +12,10 @@
         <router-view></router-view>
       </transition>
 
-      <footer-nav></footer-nav>
+      <footer-nav v-show="isLoggedIn"></footer-nav>
     </v-content>
-    <pin-view></pin-view>
-    <cheers :cheers="'yesss'"></cheers>
+    <pin-view v-if="isLoggedIn"></pin-view>
+    <cheers :type="'birthday'"></cheers>
   </v-app>
 </template>
 
@@ -40,24 +40,38 @@ export default {
       exp:null
     }
   },
+  methods: {
+    start(){
+      this.$confetti.start()
+    },
+     stop(){
+      this.$confetti.stop()
+    }
+  },
   created(){
+    // this.start();
+   
     },
  watch: {
    $route(){
      window.scrollTo(0,0)
-       if (localStorage.getItem('pinToken') && Date.now()>=VueJwtDecode.decode(localStorage.getItem('pinToken')).exp * 1000) {
+         if (localStorage.getItem('pinToken') && Date.now()>=VueJwtDecode.decode(localStorage.getItem('pinToken')).exp * 1000) {
          this.$store.dispatch('destroyPinToken');
             }
-      }
+    }
  },
   
   mounted() {
+    //  window.eventBus.$emit('checkCheers')
    if (localStorage.getItem('token')) {
       this.$store.dispatch("getUser");
       this.$store.dispatch("getCurrency");
    }
   },
   computed: {
+    isLoggedIn(){
+      return this.$store.getters.loggedIn
+    }
   },
 };
 </script>
@@ -66,7 +80,14 @@ export default {
 <style lang="scss">
 @import url("./assets/css/animate.css");
 
+.header{
+  padding:10px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  color:#e50913; 
+}
+
 a{
-  text-decoration:none
+  text-decoration:none;
 }
 </style>

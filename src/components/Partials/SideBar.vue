@@ -8,20 +8,23 @@
       temporary
       fixed
       v-model="drawer"
+      style="z-index:9999"
     >
       <section class="side-bar d-flex d-sm-none">
         <div style="background:#333;height:150px;">
-          <v-icon v-if="user && user.profile_image=='profile.png'">mdi-account-circle</v-icon>
-          <v-avatar v-else size="40" color="white">
-            <img
-              v-if="user && user.profile_image"
-              ref="img"
-              :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image"
-              alt="alt"
-            />
-          </v-avatar>
+          <router-link :to="{name:'profile',params:{username:user.username}}" tag="div">
+             <v-icon v-if="user && user.profile_image=='profile.png'">mdi-account-circle</v-icon>
+              <v-avatar v-else size="40" color="white">
+                <img
+                  v-if="user && user.profile_image"
+                  ref="img"
+                  :src="user.profile_image || 'http://localhost:3000/images/'+user.profile_image"
+                  alt="alt"
+                />
+              </v-avatar>
 
-          <span class="ml-2">{{user && user.username}}</span>
+              <span class="ml-2">{{user && user.username}}</span>
+          </router-link>
           <div class="d-flex flex-direction-row">
             <div style="text-align:center">
               Follower
@@ -32,8 +35,8 @@
               <span>{{following.length}}</span>
             </div>
           </div>
-        </div>
-        <router-link
+        </div><br>
+        <!-- <router-link
           tag="div"
           :to="{name:'zobo.list'}"
           :class="{'active':$route.name=='zobo.list'}"
@@ -42,13 +45,23 @@
         </router-link>
 
         <router-link tag="div" :to="{name:'balance'}" :class="{'active':$route.name=='balance'}">
-          <v-icon left>mdi-cash-100</v-icon>Balance
-        </router-link>
-
-        <router-link tag="div" :to="{name:'settings'}" :class="{'active':$route.name=='settings'}">
+          <v-icon left>mdi-cash-100</v-icon>Balance                                        
+        </router-link> -->
+      
+         <div :class="{'active':$route.name=='balance'}" style="cursor:text                     ">
           <v-icon left>mdi-cog-outline</v-icon>Settings
-        </router-link>
+          <!-- <span style="float:right"><v-icon right>mdi-menu-down</v-icon></span> -->
+         </div>
 
+         <div>
+           <router-link tag="div" :to="{name:'account.settings'}" :class="{'active':$route.name=='account.settings'}">
+               Account Settings 
+           </router-link>
+
+           <router-link tag="div" :to="{name:'profile.settings'}" :class="{'active':$route.name=='profile.settings'}">
+              Profile Settings
+           </router-link>
+         </div>
         <v-spacer></v-spacer>
 
         <router-link tag="div" :to="{name:'logout'}" class="bottom">

@@ -7,6 +7,7 @@ const { check, validationResult } = require('express-validator')
 const fs = require('fs')
 const TransactionController = require('./Auth/TransactionController')
 const Follower = require("./../modules/follower")
+const Following = require("./../modules/following")
 const https = require('https')
 let PayStack = require('paystack-node')
 let APIKEY = 'pk_test_9a79054f46776dddee3854e7f2d75fc3dc341353'
@@ -16,6 +17,7 @@ const environment = process.env.NODE_ENV
 
 const ZoboController = {
     create,
+    update,
     getCat,
     validateData,
     userZobos,
@@ -26,7 +28,10 @@ const ZoboController = {
     UserTransactions,
     withdraw,
     yieldedZobo,
-    verifyTest
+    verifyTest,
+    getCelepLimit,
+    getCelepAll,
+    getAllFeeds
 
 }
 
@@ -100,6 +105,7 @@ async function create(req, res) {
     let celep = req.body.celep;
     let user_id = req.user._id;
     let min = req.body.min;
+    let date = req.body.date;
     let currency = req.user.currency;
     let slug = createSlug(title)
     let follower = await Follower.findOne({ user_id: user_id }).exec()
@@ -122,10 +128,11 @@ async function create(req, res) {
             user_id,
             cover,
             min,
+            date,
             currency
         })
 
-        newPost.link = `${process.env.SERVER_HOST}/zobo/${newPost._id}/${slug}`
+        newPost.link = `${process.env.FRONT_END_URL}/zobo/${newPost._id}/${slug}`
         newPost.save().then(() => {
             follower && notifyUsers(follower.follower_id, 'z-created', user_id)
             res.status(200).json({
@@ -137,10 +144,19 @@ async function create(req, res) {
                 error: err,
                 msg: "something went wrong,please try again later"
             })
-
         })
     }
 }
+
+
+function update(req,res) {
+   Zobo.update({_id:req.body._id},req.body).exec(()=>{
+        res.status(200).json({
+                success: true,
+                msg: "Updated"
+            })
+   })
+ }
 
 function notifyUsers(ids, type, sender) {
     if (!ids.length) return
@@ -316,7 +332,9 @@ function saveTranzaction(req, res) {
                         let notify = new Notification({
                             type: 'payment',
                             sender: sender_id,
-                            recipient: owner_id
+                            recipient: owner_id,
+                            zobo_id,
+
                         })
                         notify.save().then((data, err) => {
                             console.log('====================================');
@@ -471,6 +489,7 @@ function withdraw(req, res) {
     // }
 }
 
+
 function withdrawHandle(req, res) {
     let amount = req.body.amount
     let owner_id = req.user._id
@@ -511,5 +530,45 @@ function yieldedZobo(req, res) {
         })
     })
 }
+
+
+function getCelepLimit(req,res) { 
+    Zobo.find({}).sort({ createdAt: -1 }).populate('user_id', '_id firstname profile_image lastname email username').limit(5).exec(function (err,celep) {
+        res.status(200).json({
+            celep
+        })
+    })
+ }
+
+ 
+function getCelepAll(req,res) { 
+    
+}
+
+function getAllFeeds(req,res) {  
+     let userId=req.user._id;
+
+     Following.findOne({user_id:userId}).exec((err,follow)=>{
+         if (follow) {
+            let following=follow.following_id;
+            Zobo.find({user_id:{$in:following}}).sort({ createdAt: -1 }).populate('user_id', '_id firstname profile_image lastname email username').exec((err,feeds)=>{                         
+               if (err) {
+                res.status(400).json({
+                    err
+                })
+               }else{
+                res.status(200).json({
+                    feeds
+                })
+               }
+            })
+            
+          
+         }
+     })
+}
+
+
+
 
 module.exports = ZoboController

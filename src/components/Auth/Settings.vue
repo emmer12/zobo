@@ -117,7 +117,6 @@
           <h4 class="text-block">BirthDay</h4>
             <v-menu
                 ref="menu"
-                lazy
                 :close-on-content-click="false"
                 v-model="menu"
                 transition="scale-transition"

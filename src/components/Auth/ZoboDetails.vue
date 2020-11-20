@@ -1,11 +1,12 @@
 <template>
-  <div class="pa-4">
+  <div class="pa-4 z-details">
     <div class="d-flex justify-center align-center" style v-if="zobo">
      
       <v-layout row wrap>
+        <v-btn :to="{name:'zobo.edit',params:{id:zobo._id}}" style="position:absolute;right:15px;z-index:999" color="primary" outlined><v-icon left>mdi-pencil-outline</v-icon> Edit </v-btn>
         <v-flex md6 xs12>
           <div style="width:100%">
-            <div>
+            <div class="img">
               <img :src="zobo.cover" width="100%" />
             </div>
           </div>
@@ -54,7 +55,9 @@
     <v-divider></v-divider>
 
     <div class="yield-con">
-      <h2 class="title mt-5">Returns</h2>
+       <div class="header">
+              <h4 class="">Returns</h4>
+        </div>
       <v-divider></v-divider>
 
       <div v-if="!yielded.length" class="pa-10">
@@ -186,6 +189,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.z-details{
+  .img{
+    height:300px;
+    position:relative;
+    img{
+      height:100%;
+      object-fit: cover;
+    }
+  }
+}
 .hidey {
   & div {
     filter: blur(5px);
