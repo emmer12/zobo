@@ -44,12 +44,58 @@
 
 
      <v-spacer></v-spacer>
-      <div class="nav-search d-none d-sm-flex"  v-if="user && user.confirmed">
-        <v-text-field prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading" clearable ></v-text-field>
+      <div class="nav-search d-none d-sm-flex" style="position:relative"  v-if="user && user.confirmed">
+        <v-text-field prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading" clearable v-model="search"></v-text-field>
+        <div class="search-card" v-if="search.length">
+             <div v-if="celeb && celeb.length">
+            
+               <div v-for="c in celeb" :key="c._id">
+
+                <v-list>
+                <v-list-avatar>
+                 <img :src="c.profile_image || 'http://localhost:3000/images/'+c.profile_image" width="100%">
+                 {{ c.username }}
+               </v-list-avatar>
+             </v-list>
+               </div>
+             </div>
+             <div v-else>
+               No record found 
+             </div>
+        </div>
       </div>
-      <router-link class="ml-4" style="cursor:pointer" v-if="isLoggedIn && user && user.confirmed" tag="div" :to="{name:'feeds'}">
+
+
+        <div class="search-card-m d-flex d-sm-none" v-if="search.length && searchToggle">
+             <div v-if="celeb && celeb.length">
+            
+               <div v-for="c in celeb" :key="c._id">
+
+                <v-list>
+                <v-list-avatar>
+                 <img :src="c.profile_image || 'http://localhost:3000/images/'+c.profile_image" width="100%">
+                 {{ c.username }}
+               </v-list-avatar>
+             </v-list>
+               </div>
+             </div>
+             <div v-else>
+               No record found 
+             </div>
+        </div>
+
+
+      <div class="d-flex d-sm-none" style="position:relative;">
+         <div @click="searchToggle=!searchToggle"><v-icon color="grey" size="35">mdi-magnify</v-icon></div>
+            <div class="m-s-f" >
+            <transition enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
+                <v-text-field v-if="searchToggle" prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading" clearable v-model="search"></v-text-field>
+            </transition>
+           </div>
+      </div>
+      <router-link class="ml-2" style="cursor:pointer" v-if="isLoggedIn && user && user.confirmed" tag="div" :to="{name:'feeds'}">
          <!-- Feeds -->
-         <v-icon size="35">mdi-rss</v-icon>
+         <v-icon size="35" color="grey">mdi-cake-variant</v-icon>
       </router-link>
       <div class="mx-4 mt-2 d-none d-sm-flex" v-if="isLoggedIn && user && user.confirmed" style="cursor:pointer" @click="openNote">
         <v-badge color="success" :content="count || '0'">
@@ -174,6 +220,7 @@
         @close="notifyShow=false"
       ></notifications-view>
     </transition>
+
   </div>
 </template>
 
@@ -193,8 +240,9 @@ export default {
       drawer: false,
       notifyShow: false,
       openCurrency:false,
+      loading:false,
       search:"",
-      loading:false
+      searchToggle:false 
     };
   },
 
@@ -221,8 +269,10 @@ export default {
     submitSearch(val){
       if (!val.length) return;
        this.loading = true;
-       this.$store.dispatch("searchUsers", {val}).then(()=>{
-      }).catch(()=>{
+       this.$store.dispatch("searchUsers", val).then(()=>{
+        this.loading = false;
+      
+    }).catch(()=>{
         this.loading = false;
       })
     },
@@ -231,7 +281,6 @@ export default {
       if (this.time) {
         clearTimeout(this.time);
       }
-      this.error = false;
       this.time = setTimeout(() => this.submitSearch(val), 1000);
     },
   },
@@ -254,6 +303,11 @@ export default {
     this.notify();
     }
   },
+  created(){
+    // this.event.$on('click:clear',function() {
+      // alert()
+    // })
+  },
 
   computed: {
     ...mapGetters({
@@ -261,7 +315,8 @@ export default {
       isLoggedIn: "loggedIn",
       count: "notificationsCount",
       notifications: "notifications",
-      currencies:'currencies'
+      currencies:'currencies',
+      celeb:'celeb'
     })
   }
 };
@@ -425,6 +480,36 @@ ul {
   }
 }
 
+
+.search-card{
+    padding: 10px;
+    min-width: 240px;
+    background: #fff;
+    position: absolute;
+    top: 57px;
+    right: 0px;
+    border-radius: 7px;
+    z-index: 999;
+    border: 1px solid grey;
+}
+.search-card-m{
+      position: fixed;
+    border-radius: 5px;
+    left: 0px;
+    z-index: 999;
+    top: 119px;
+    padding: 10px;
+    width: 100%;
+    background: #ccc;
+}
+
+.m-s-f{
+    top: 65px;
+    position: fixed;
+    width: 100%;
+    left: 0px;
+    overflow:hidden
+}
 
 @media (max-width:460px){
   .logo{

@@ -33,8 +33,8 @@ export default {
     },
     searchUsers({commit },data) {
         return new Promise((resolve, reject) => {
-            Api.getUser(data).then(res => {
-               commit('searchUsers',res.data.celebs)
+            Api.searchUsers(data).then(res => {
+               commit('setCeleb',res.data.celebs)
                resolve(res)
             }).catch(err => {
                 if (err.response.data.error && err.response.data.name==='TokenExpiredError') {

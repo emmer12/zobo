@@ -57,11 +57,10 @@ function searchCelebs(req, res) {
     }
 }
 
-async function getUsers(req, res, next) {
+async function getUsers(req, res) {
 
     var limit = parseInt(req.query.limit)
 
-   
    
    
     const count = await User.count().exec()
