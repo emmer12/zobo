@@ -61,13 +61,17 @@
           </div> 
 
         </v-container>
+      <pacman-loader v-infinite-scroll="getFeed"  infinite-scroll-disabled="busy" infinite-scroll-distance="10" v-show="!busy" :loading="true" color="#e50913" class="ma-4" ></pacman-loader>
+      
+      
       </section>
 
-      <div v-infinite-scroll="getFeeds" infinite-scroll-disabled="busy" infinite-scroll-distance="10"></div>
+      <!-- <div v-infinite-scroll="getFeeds" infinite-scroll-disabled="busy" infinite-scroll-distance="10"></div> -->
+
 
       <section class="side pa-4 d-none d-sm-block">
           <div class="header">
-              <h4>Meet New Celebrities</h4>
+              <h4>Meet New Celebrants</h4>
           </div>
           <v-divider></v-divider>
           <div v-if="loadingU">
@@ -87,15 +91,21 @@
 import { mapActions, mapGetters } from "vuex";
 import ZoboCard from "./../Partials/ZoboCard";
 import UserBox from "./../Partials/UserBox";
+import PacmanLoader from 'vue-spinner/src/PacmanLoader.vue'
+
 export default {
   components: {
     ZoboCard,
-    UserBox
+    UserBox,
+    PacmanLoader
   },
   data() {
     return {
       loading:false,
-      loadingU:false
+      loadingU:false,
+      busy:false,
+      limit:0,
+      increment:6,
     };
   },
 
@@ -103,8 +113,12 @@ export default {
     ...mapActions(["getFeeds","getOtherUsers"]),
 
     getFeed(){
-      this.loading=true
-      this.getFeeds().then(()=>{
+      this.loading=true && this.increment > 6
+      this.limit = this.limit+this.increment
+      this.getFeeds({
+        limit:this.limit
+      }).then((res)=>{
+      this.busy=res.exhusted
       this.loading=false
       }).catch(()=>{
       this.loading=false
@@ -121,7 +135,7 @@ export default {
   },
 
   mounted() {
-    this.getFeed();
+    // this.getFeed();
     this.getUsers();
   },
   computed: {

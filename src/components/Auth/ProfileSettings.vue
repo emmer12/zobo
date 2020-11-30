@@ -151,7 +151,7 @@
                   <v-text-field
                     :label="user.birthday"
                     @focus="inputF"
-                    @blur="val=>{updateField('birthday',val)}"
+                    @blur="()=>{update('birthday',birthday)}"
                     v-model="birthday"
                     prepend-inner-icon="event"
                     readonly
@@ -166,6 +166,8 @@
                   :min="new Date().toISOString().substr(0, 10)"
                 ></v-date-picker>
               </v-menu>
+
+              <v-btn color="success" @click="updateBirthDay('birthday',birthday)">Update date of birth {{birthday}}</v-btn>
         </v-card>
       </div>
 
@@ -222,7 +224,7 @@ export default {
      updateField(field,e){
       // this.zobo.date=this.newZobo.date.length ? this.newZobo.date : this.zobo.date
          
-      if (e.target.value !== this.fValue) {
+      if (e.target.value !== this.fValue || field == "birthday"){
        let data={}
        data.field=field;
        data.value=e.target.value
@@ -241,6 +243,22 @@ export default {
          this.loading=false
        })
       }
+     },
+
+     updateBirthDay(field,val){
+         this.$store.dispatch('updateUser',{field:'birthday',value:val}).then(()=>{
+         this.loading=false
+         this.$toast.success({
+              title: "Success",
+              message: "Profile updated"
+            });
+       }).catch(()=>{
+         this.$toast.error({
+              title: "Update fale",
+              message: "something went wrong"
+            });                                                
+         this.loading=false
+       })
      },
 
      setImage(data){

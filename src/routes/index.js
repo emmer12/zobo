@@ -28,6 +28,7 @@ import EditZobo from '../components/pages/EditZobo';
 import Feeds from '../components/pages/Feeds';
 import StoreCat from '../components/pages/StoreCat';
 import EmailConfirm from '../components/pages/EmailConfirm';
+import FAQ from '../components/pages/FAQ';
 import Payment from '../components/Auth/Payment';
                                                                                                                
 export const routes = [
@@ -84,9 +85,9 @@ export const routes = [
         component: About
     },
     { 
-        path: '/contact',
-        name: 'contact',
-        component: Contact
+        path: '/faq',
+        name: 'faq',
+        component:FAQ
     },
     { 
         path: '/store',

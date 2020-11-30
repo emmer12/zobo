@@ -21,7 +21,8 @@ const UserController = {
     addSpecial,
     deleteSpecial,
     getOtherUser,
-    searchCelebs
+    searchCelebs,
+    resendVerifyMail
     // requestPasswordReset,  
     // passwordReset,
     // confirmPasswordReset
@@ -46,12 +47,9 @@ function searchCelebs(req, res) {
             .limit(20)
             .sort({ created_at: -1 })
             .exec(function (err, users) {
-                console.log('====================================');
-                console.log(users);
-                console.log('====================================');                
                     res.status(200).json({
                         success: true,
-                        celebs:users
+                        celebs:usersFilter(users)
                     })
             })
     }
@@ -75,7 +73,7 @@ async function getUsers(req, res) {
             }
         }).sort({ createdAt: -1 }).limit(limit).exec(function (err, users) {
             if (users) {
-                res.status(200).json({
+                 res.status(200).json({
                     users,
                     exhusted:count < limit ? true : false 
                 })
@@ -316,10 +314,15 @@ function setCurrency(req,res) {
 
   function sendMail(req,res) { 
     Mailer.randomEmailwithTemplate(req.user)
-      console.log('====================================');
-      console.log('sebnding.....');
-      console.log('====================================');
+  
   }
+
+
+  
+  function resendVerifyMail(req,res) { 
+    Mailer.sendConfirmationEmail(req.user)
+  }
+
 
 
 // function confirmUser(req, res) {

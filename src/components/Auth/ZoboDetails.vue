@@ -90,9 +90,10 @@
                   <span>{{yields.amount}}</span>
                 </div>
                 <v-list-item-title>
-                  <strong>{{ yields.sender_id[0].username }}</strong> but you zobo
+                  <strong>payment by {{ yields.sender_id[0].username }}</strong>
                 </v-list-item-title>
-                <v-list-item-subtitle>Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae quod ipsum porro esse delectus minima ea eos facere molestias quasi!</v-list-item-subtitle>
+                <v-list-item-subtitle v-if="yields.msg">{{yeilds.msg}}</v-list-item-subtitle>
+
                 <div v-if="isLoggedIn">
                   <v-btn
                     rounded

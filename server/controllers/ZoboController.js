@@ -28,7 +28,6 @@ const ZoboController = {
     UserTransactions,
     withdraw,
     yieldedZobo,
-    verifyTest,
     getCelepLimit,
     getCelepAll,
     getAllFeeds
@@ -241,65 +240,15 @@ function destroyZobo(req, res) {
 
 
 function payment(req, res) {
-    let status = ['success', 'fail', 'success', 'success', 'success', 'fail'];
-    let num = Math.round(Math.random() * status.length - 1);
-    switch (status[num]) {
-        case 'success':
-            return saveTranzaction(req, res)
-            break;
-        case 'fail':
-            return tranzactionFail(res)
-            break;
-        default: 'pending'
-            break;
-    }
+            return saveTranzaction(req, res)      
 }
-
-// UM2L2BgeZ5
-
-function verifyTest(req, res) { 
-  
-
-}
-
-function hCallback(resp) {  
-        let data = ''
-        resp.on('data', (chunk) => {
-            data += chunk
-        });
-        resp.on('end', ()=> {
-             if (JSON.parse(data).status == false) {
-                 console.log('no transacsion found');
-                 
-             }else{
-                 console.log('good');
-                 
-             }
-           
-        }).on('error', error => {
-            console.log(error);
-             
-
-    })
-    
-}
-
-
 
 
 function saveTranzaction(req, res) {
-
-    let amount = req.body.amount;
-    let zobo_id = req.body.zobo_id;
-    let owner_id = req.body.user_id;
-    let sender_id = req.user._id;
-    let msg = req.body.msg;
-    // let transaction_id=Math.round(Math.random()*10000+new Date().getTime());
-    let type = 'deposit'
-    let show = req.body.show;
-    let status = req.body.details.status;
-    let transaction_id = req.body.details.transaction;
-    let reference = req.body.details.trxref;
+    let {amount,zobo_id,owner_id,msg,show} = req.body;
+    let sender_id=req.user._id;
+    let {status,transaction_id,reference} = req.body.details;
+    let type = 'deposit';
     let newPayment = new Payment({
         amount,
         msg,
@@ -312,8 +261,7 @@ function saveTranzaction(req, res) {
         status,
         reference
     })
-    "UM2L2BgeZ5"
-        TransactionController.verifyPayment('UM2L2BgeZ5',(resp)=>{
+        TransactionController.verifyPayment(reference,(resp)=>{
             let data = ''
         resp.on('data', (chunk) => {
             data += chunk
@@ -321,7 +269,7 @@ function saveTranzaction(req, res) {
         resp.on('end', ()=> {
              if (JSON.parse(data).status == false) {
                  res.status(400).json({
-                    err: error,
+                    err: true,
                     msg: "Transaction not found"
                 })
                  
@@ -338,12 +286,10 @@ function saveTranzaction(req, res) {
                         })
                         notify.save().then((data, err) => {
                             console.log('====================================');
-                            console.log("sending email......");
+                            console.log("sending email......success");
                             console.log('====================================');
                         })
                     } else {
-                        console.log(err);
-        
                         res.status(400).json({
                             error: true,
                             msg: "something went wrong,please try again later"
@@ -359,7 +305,10 @@ function saveTranzaction(req, res) {
              }
            
         }).on('error', error => {
-            console.log(error);
+            res.status(400).json({
+                err: error,
+                msg: "Tranzaction failed"
+            })
              
 
     })
@@ -524,7 +473,7 @@ function withdrawFail(res) {
 function yieldedZobo(req, res) {
     let user_id = req.user._id;
     let zobo_id = req.params.zoboId;
-    Payment.find({ owner_id: user_id, type: 'deposit', zobo_id: zobo_id }).sort({ createdAt: -1 }).populate('sender_id').exec(function (err, yielded) {
+    Payment.find({ owner_id: user_id, type: 'deposit', zobo_id: zobo_id }).sort({ createdAt: -1 }).populate('sender_id,_id firstname profile_image lastname email username').exec(function (err, yielded) {
         res.status(200).json({
             yielded
         })
@@ -533,7 +482,7 @@ function yieldedZobo(req, res) {
 
 
 function getCelepLimit(req,res) { 
-    Zobo.find({}).sort({ createdAt: -1 }).populate('user_id', '_id firstname profile_image lastname email username').limit(5).exec(function (err,celep) {
+    Zobo.find({}).sort({ createdAt: -1 }).populate('user_id', '_id firstname profile_image lastname email username').limit(4).exec(function (err,celep) {
         res.status(200).json({
             celep
         })
@@ -545,20 +494,24 @@ function getCelepAll(req,res) {
     
 }
 
-function getAllFeeds(req,res) {  
+ function getAllFeeds(req,res) {  
      let userId=req.user._id;
 
-     Following.findOne({user_id:userId}).exec((err,follow)=>{
+     var limit = parseInt(req.query.limit)
+
+     Following.findOne({user_id:userId}).exec(async (err,follow)=>{
          if (follow) {
-            let following=follow.following_id;
-            Zobo.find({user_id:{$in:following}}).sort({ createdAt: -1 }).populate('user_id', '_id firstname profile_image lastname email username').exec((err,feeds)=>{                         
+             let following=follow.following_id;
+             const count = await Zobo.find({user_id:{$in:following}}).count().exec() 
+            Zobo.find({user_id:{$in:following}}).sort({ createdAt: -1 }).populate('user_id', '_id firstname profile_image lastname email username').limit(limit).exec((err,feeds)=>{                         
                if (err) {
                 res.status(400).json({
                     err
                 })
                }else{
                 res.status(200).json({
-                    feeds
+                    feeds,
+                    exhusted:count < limit ? true : false 
                 })
                }
             })

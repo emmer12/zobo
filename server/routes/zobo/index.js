@@ -25,7 +25,7 @@ router.get('/get-zobo-cat',middleware.authenticate,ZoboController.getCat)
 
 router.get('/get-my-zobos',middleware.authenticate,ZoboController.userZobos)
 
-router.get('/verify-test',ZoboController.verifyTest)
+// router.get('/verify-test',ZoboController.verifyTest)
 
 router.get('/get-by-id/:id',middleware.authenticate,ZoboController.getById)
 

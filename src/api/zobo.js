@@ -66,8 +66,9 @@ const getYield=(data) => {
 }
 
 
-const getFeeds=() => {
-    return api.get(endPoint + '/feeds')
+const getFeeds=(data) => {
+    console.log(data,'infiite');
+    return api.get(endPoint + '/feeds/?limit='+data.limit)
 }
 
 const getCelepLimit=() => {

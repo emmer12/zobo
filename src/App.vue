@@ -13,6 +13,7 @@
       </transition>
 
       <footer-nav v-show="isLoggedIn"></footer-nav>
+      <main-footer v-show="!isLoggedIn" v-if="$route.name!='profile'"></main-footer>
     </v-content>
     <pin-view v-if="isLoggedIn"></pin-view>
     <cheers :type="'birthday'"></cheers>
@@ -25,6 +26,7 @@ import NavBar from "./components/Partials/NavBar";
 import Cheers from "./components/Partials/Cheers";
 import PinView from "./components/Auth/PinView";
 import FooterNav from "./components/Partials/Footer";
+import MainFooter from "./components/Partials/MainFooter";
 
 export default {
   name: "App",
@@ -32,6 +34,7 @@ export default {
     NavBar,
     Cheers,
     FooterNav,
+    MainFooter,
     PinView
   },
   data() {
@@ -87,7 +90,26 @@ export default {
   color:#e50913; 
 }
 
+.sub-header{
+  margin:20px 0px;
+   h1{
+      font-size:2.5rem
+
+   }
+ }
+
 a{
   text-decoration:none;
+}
+
+
+
+@media (max-width:600px){
+  .sub-header{
+   h1{
+      font-size:1.5rem
+
+   }
+ }
 }
 </style>

@@ -45,19 +45,21 @@
 
      <v-spacer></v-spacer>
       <div class="nav-search d-none d-sm-flex" style="position:relative"  v-if="user && user.confirmed">
-        <v-text-field prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading" clearable v-model="search"></v-text-field>
+        <v-text-field prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading" clearable  @click:clear="clear" v-model="search"></v-text-field>
         <div class="search-card" v-if="search.length">
              <div v-if="celeb && celeb.length">
-            
-               <div v-for="c in celeb" :key="c._id">
-
-                <v-list>
-                <v-list-avatar>
-                 <img :src="c.profile_image || 'http://localhost:3000/images/'+c.profile_image" width="100%">
-                 {{ c.username }}
-               </v-list-avatar>
-             </v-list>
-               </div>
+        
+                <v-list two-line>
+                 <v-list-item v-for="c in celeb" :key="c._id" :to="{name:'profile',params:{username:c.username}}">  
+                <v-list-item-avatar>
+                 <img :src="c.profile_image || 'http://localhost:3000/images/'+c.profile_image" >
+               </v-list-item-avatar>
+               <v-list-item-content>
+                 <v-list-item-title v-text="c.firstname +' '+c.lastname"></v-list-item-title>
+                 <v-list-item-subtitle v-text="'@'+c.username"></v-list-item-subtitle>
+               </v-list-item-content>
+                 </v-list-item>
+               </v-list>
              </div>
              <div v-else>
                No record found 
@@ -67,17 +69,19 @@
 
 
         <div class="search-card-m d-flex d-sm-none" v-if="search.length && searchToggle">
-             <div v-if="celeb && celeb.length">
-            
-               <div v-for="c in celeb" :key="c._id">
-
+               <div v-if="celeb && celeb.length">
+        
                 <v-list>
-                <v-list-avatar>
-                 <img :src="c.profile_image || 'http://localhost:3000/images/'+c.profile_image" width="100%">
-                 {{ c.username }}
-               </v-list-avatar>
-             </v-list>
-               </div>
+                 <v-list-item v-for="c in celeb" :key="c._id" :to="{name:'profile',params:{username:c.username}}">  
+                <v-list-item-avatar>
+                 <img :src="c.profile_image || 'http://localhost:3000/images/'+c.profile_image" >
+               </v-list-item-avatar>
+               <v-list-item-content>
+                 <v-list-item-title v-text="c.firstname +' '+c.lastname"></v-list-item-title>
+                 <v-list-item-subtitle v-text="'@'+c.username"></v-list-item-subtitle>
+               </v-list-item-content>
+                 </v-list-item>
+               </v-list>
              </div>
              <div v-else>
                No record found 
@@ -89,7 +93,7 @@
          <div @click="searchToggle=!searchToggle"><v-icon color="grey" size="35">mdi-magnify</v-icon></div>
             <div class="m-s-f" >
             <transition enter-active-class="animated slideInDown" leave-active-class="animated slideOutUp">
-                <v-text-field v-if="searchToggle" prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading" clearable v-model="search"></v-text-field>
+                <v-text-field v-if="searchToggle" prepend-inner-icon="mdi-magnify" solo rounded label="Find Celebrant" :loading="loading"  @click:clear="clear" clearable v-model="search"></v-text-field>
             </transition>
            </div>
       </div>
@@ -98,9 +102,9 @@
          <v-icon size="35" color="grey">mdi-cake-variant</v-icon>
       </router-link>
       <div class="mx-4 mt-2 d-none d-sm-flex" v-if="isLoggedIn && user && user.confirmed" style="cursor:pointer" @click="openNote">
-        <v-badge color="success" :content="count || '0'">
-          <v-icon size="30">mdi-bell-outline</v-icon>
+        <v-badge color="success" :content="count" v-if="count && count >= 1">
         </v-badge>
+          <v-icon size="30">mdi-bell-outline</v-icon>
       </div>
 
       <v-btn @click="toggleDrawer"  v-if="user && user.confirmed" class="d-flex d-sm-none" icon color="primary">
@@ -122,6 +126,7 @@
             </v-btn>
           </li>
         </ul>
+
 
         <v-btn
           v-if="user && user.profile_image=='profile.png'"
@@ -247,6 +252,10 @@ export default {
   },
 
   methods: {
+    clear(){
+       this.search=""
+       this.searchToggle=false
+    },
     toggleDrawer() {
       this.drawer = !this.drawer;
     },
@@ -289,9 +298,12 @@ export default {
     $route() {
       this.dropdownPro = false;
       this.drawer = false;
+      this.search=''
+      this.searchToggle=false 
       if (localStorage.getItem('token')) {
         this.notify();
       }
+
     },
 
      search(val) {
@@ -304,9 +316,9 @@ export default {
     }
   },
   created(){
-    // this.event.$on('click:clear',function() {
-      // alert()
-    // })
+    this.$on('click:clear',function() {
+      alert()
+    })
   },
 
   computed: {
@@ -491,6 +503,8 @@ ul {
     border-radius: 7px;
     z-index: 999;
     border: 1px solid grey;
+    max-height:350px;
+    overflow-y:auto
 }
 .search-card-m{
       position: fixed;
@@ -500,7 +514,9 @@ ul {
     top: 119px;
     padding: 10px;
     width: 100%;
-    background: #ccc;
+    background: #fff;
+     max-height:350px;
+    overflow-y:auto
 }
 
 .m-s-f{

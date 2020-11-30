@@ -31,6 +31,23 @@ export default {
             })
         })
     },
+
+    resendVerifyEmail({commit }) {
+        return new Promise((resolve, reject) => {
+            Api.resendVerifyEmail().then(res => {
+               resolve(res)
+            }).catch(err => {
+                if (err.response.data.error && err.response.data.name==='TokenExpiredError') {
+                    localStorage.removeItem('pinToken')
+                    commit("destroyPinToken")
+                }
+                reject(err)
+
+            })
+        })
+    },
+
+
     searchUsers({commit },data) {
         return new Promise((resolve, reject) => {
             Api.searchUsers(data).then(res => {

@@ -50,6 +50,11 @@ const setCurrency=(data)=>{
 const sendEmail=()=>{
     return api.post(endPoint+'/send-email')
 }
+
+const resendVerifyEmail=()=>{
+    return api.post(endPoint+'/resend-verify-email')
+}
+
 const addSpecial=(data)=>{
     return api.post(endPoint+'/add-special',data)
 }
@@ -77,5 +82,6 @@ export default{
    addSpecial,
    deleteSp,
    getOtherUser,
-   searchUsers
+   searchUsers,
+   resendVerifyEmail
 }

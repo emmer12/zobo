@@ -2,7 +2,7 @@
   <div>
           <div class="profile-banner">
 
-                <div class="b-day">
+                <div class="b-day" v-if="profile.user.birthday">
                 <v-icon color="primary">mdi-cake-layered</v-icon>
                 <p>{{profile.user.birthday | birthday }}</p>
               </div>
@@ -46,7 +46,7 @@
                  <h4>Other post by {{profile.user.username | capFirst }} </h4>        
               </div>
               <v-divider></v-divider>
-             <v-layout  v-if="profile.zobo.length" row wrap>
+             <v-layout  v-if="profile.zobo.length" row wrap style="position:relative">
               <carousel-3d  :height="350"  :controls-visible="true">
                   <slide v-for="(zobo, index) in profile.zobo" :index="index" :key="index" >                     
 

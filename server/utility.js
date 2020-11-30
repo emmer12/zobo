@@ -1,3 +1,5 @@
+const fx=require('money');
+
 function evenRound(num,decimalPlaces) { 
     let d=decimalPlaces || 0;
     let m=Math.pow(10,d);
@@ -19,21 +21,23 @@ function evenRound(num,decimalPlaces) {
  }
 
 const currencyConverter=function(from,to,amount){
-     let rate={
-        'USD':{"NGN":386.59},
-        'NGN':{"USD":0.0026},
-     }
-    if (from=="USD" && to=="NGN") {
-        let converted=rate.USD.NGN * amount;
-        return converted.toFixed(4);
-    }
-    else if(from=="NGN" && to=="USD"){
-        let converted=rate.NGN.USD * amount;
-        return converted.toFixed(4)
-    }
-    else{
-        return amount
-    }
+    //  let rate={
+    //     'USD':{"NGN":386.59},
+    //     'NGN':{"USD":0.0026},
+    //  }
+    // if (from=="USD" && to=="NGN") {
+    //     let converted=rate.USD.NGN * amount;
+    //     return converted.toFixed(4);
+    // }
+    // else if(from=="NGN" && to=="USD"){
+    //     let converted=rate.NGN.USD * amount;
+    //     return converted.toFixed(4)
+    // }
+    // else{
+    //     return amount
+    // }            
+                         
+    fx(1000).from("USD").to("GBP")
 }
 
 

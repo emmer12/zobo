@@ -1,8 +1,10 @@
 <template>
   <div v-if="user.confirmed">
     <section class="bottom-nav d-flex d-sm-none" id="foot-nav">
-      <router-link tag="div" :to="{name:'zobo.list'}" :class="{'active':$route.name=='zobo.list'}">
-        <v-icon>mdi-home-lightbulb-outline</v-icon>
+
+
+       <router-link tag="div" :to="{name:'zobo.list'}" :class="{'active':$route.name=='zobo.list'}">
+        <v-icon>mdi-home</v-icon>
         <div>Home</div>
       </router-link>
 
@@ -13,7 +15,15 @@
 
       <router-link tag="div" :class="{'active':$route.name=='all.notification'}" :to="{name:'all.notification'}" >
         <v-icon>mdi-bell-outline</v-icon>
-        <div>Alert</div>
+        <div>
+          Alert
+          <v-badge style="left: -10px;top:-30px" color="success" :content="count" v-if="count && count >= 1"></v-badge>
+        </div>
+      </router-link>
+
+      <router-link tag="div" :to="{name:'profile',params:{username:user.username}}" :class="{'active':$route.name=='profile'}">
+        <v-icon>mdi-account-circle</v-icon>
+        <div>Profile</div>
       </router-link>
     </section>
   </div>
@@ -25,7 +35,7 @@ export default {
     return {
        direction: 0,
        prevDirection:0,
-       prevScroll: window.scrollY || document.documentElement.scrollTop
+       prevScroll: window.scrollY || document.documentElement.scrollTop,
     };
   },
 
@@ -74,6 +84,9 @@ export default {
   computed: {
     user(){
       return this.$store.getters.user
+    },
+    count(){
+      return this.$store.getters.notificationsCount
     }
   }
 };
@@ -86,7 +99,7 @@ export default {
   display: flex;
   flex-direction: row;
   background: #e50913;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255,1);
   justify-content: space-between;
   align-items: center;
   text-align: center;

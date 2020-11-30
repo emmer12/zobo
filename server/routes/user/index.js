@@ -36,6 +36,8 @@ router.post('/unfollow',middleware.authenticate,FollowController.unFollow)
 
 router.post('/send-email',middleware.authenticate,UserController.sendMail)
 
+router.post('/resend-verify-email',middleware.authenticate,UserController.resendVerifyMail)
+
 router.post('/add-special',middleware.authenticate,UserController.addSpecial)
 
 router.delete('/delete-special/:id',middleware.authenticate,UserController.deleteSpecial)

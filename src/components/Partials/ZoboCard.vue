@@ -6,7 +6,11 @@
             <!-- <v-btn @click="deleteZobo(zobo._id)" style="float:right;z-index:999" fab small color="error" class="elevation-1">
               <v-icon>mdi-delete</v-icon>
             </v-btn> -->
+
           <v-card tag="div" class="ma-2 pa-2 z-card elevation-10" :to="{name:'myzobopage',params:{title:zobo.slug,id:zobo._id}}">
+          <div class="special" v-if="zobo.spacial">
+            <v-icon>mdi-medical-bag</v-icon>
+          </div>
             <span class="title" v-if="zobo.title.length < 5">{{zobo.title}}</span>
             <span v-else class="title">{{zobo.title.substr(0,5) + '...'}}{{zobo.title.substr(-5)}}</span>
             <div class="display">
@@ -28,6 +32,9 @@
 
         <div  v-if="from=='home'">
           <v-card tag="div" class="ma-2 pa-2 z-card elevation-10" :to="{name:'myzobopage',params:{title:zobo.slug,id:zobo._id}}">
+              <div class="special" v-if="zobo.spacial">
+                <v-icon size="30" color="primary">mdi-check-decagram</v-icon>
+              </div>
             <span class="title" v-if="zobo.title.length < 5">{{zobo.title}}</span>
             <span v-else class="title">{{zobo.title.substr(0,5) + '...'}}{{zobo.title.substr(-5)}}</span>
             <div class="display">
@@ -35,7 +42,8 @@
             </div>
           <!-- &#8358; -->
             <div class="details" >
-              <router-link v-on:click.prevent :to="{name:'profile',params:{username:zobo.user_id[0].username}}">              <v-avatar
+              <router-link v-on:click.prevent :to="{name:'profile',params:{username:zobo.user_id[0].username}}"> 
+                <v-avatar
                 size="40"
                 color="white"
                 
@@ -65,9 +73,16 @@ export default {
   padding:10px;
   & .display{
     clip-path: circle(200px at center 0px);
-    stroke: 2px;
+    stroke: 2px;                                                                                                     
     height:230px;
     background: #f7f6f6;
+    position:relative;
+  }
+
+  .special{
+    position: absolute;
+    left: 90%;
+    top:15                                               px;
   }
 }
 </style>
